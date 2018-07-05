@@ -16,7 +16,7 @@ tags:
 
 <https://github.com/greglobinski/gatsby-starter-personal-blog>
 
-こちらのstarterのデザインがいい感じだったので導入してブログを書いてみたのですが、デフォルトだとファイルシステムからコンテンツを読むようになっていて、contentfulに対応させようと色々と変更してみたものの思ったより手間がかかりそうで放置していました。
+こちらのstarterのデザインがいい感じだったのでテンプレートとして導入してブログを書いてみたのですが、デフォルトだとファイルシステムからコンテンツを読むようになっていて、contentfulに対応させようと色々と変更してみたものの思ったより手間がかかりそうで放置していました。
 
 そして今日ふとgatsbyのstarterでいい感じのものがないかなぁと[このあたり](https://www.gatsbyjs.org/docs/gatsby-starters/)を漁っていて見つけたのが[gatsby-starter-netlify-cms](https://github.com/AustinGreen/gatsby-starter-netlify-cms)です。
 
