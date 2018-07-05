@@ -33,7 +33,7 @@ export const BlogPostTemplate = ({
   const PostContent = contentComponent || Content;
   const iconSize = 36;
   const filter = count => (count > 0 ? count : "");
-  const url = `https://blog.valletta.io/${slug}`;
+  const url = `https://blog.valletta.io/${encodeURIComponent(slug)}`;
 
   return (
     <section className="section">
