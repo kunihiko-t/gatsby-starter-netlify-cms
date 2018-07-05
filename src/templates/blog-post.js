@@ -46,7 +46,7 @@ export const BlogPostTemplate = ({
             </h1>
             <p>{description}</p>
             <PostContent content={content} />
-            <div style={{ marginTop: "20px" }} className="columns">
+            <div style={{ marginTop: "20px" }} className="columns is-mobile">
               <div className="column is-narrow is-offset-4">
                 <TwitterShareButton url={url} title={title}>
                   <TwitterIcon round size={iconSize} />
