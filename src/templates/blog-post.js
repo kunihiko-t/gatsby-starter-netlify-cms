@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { kebabCase } from "lodash";
+import { format } from "date-fns";
 import {
   FacebookShareButton,
   GooglePlusShareButton,
@@ -26,12 +27,13 @@ export const BlogPostTemplate = ({
   description,
   tags,
   title,
-  helmet
+  helmet,
+  slug
 }) => {
   const PostContent = contentComponent || Content;
   const iconSize = 36;
   const filter = count => (count > 0 ? count : "");
-  const url = window.location.href;
+  const url = `https://blog.valletta.io/${slug}`;
 
   return (
     <section className="section">
@@ -134,6 +136,7 @@ const BlogPost = ({ data }) => {
       helmet={<Helmet title={`${post.frontmatter.title} | Blog`} />}
       tags={post.frontmatter.tags}
       title={post.frontmatter.title}
+      slug={post.fields.slug}
     />
   );
 };
@@ -150,6 +153,9 @@ export const pageQuery = graphql`
   query BlogPostByID($id: String!) {
     markdownRemark(id: { eq: $id }) {
       id
+      fields {
+        slug
+      }
       html
       frontmatter {
         date(formatString: "MMMM DD, YYYY")
