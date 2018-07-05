@@ -8,7 +8,6 @@ tags:
   - fastai
   - kaggle
 ---
-
 [Fast.ai](http://www.fast.ai/)の[Deep Learning Part 1: Practical Deep Learning for Coders](http://course.fast.ai/)の動画を観たり課題を解いたりした時のメモです。
 
 今回は[Dogs vs. Cats Redux: Kernels Edition](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/discussion/27613)を[このJupyter Notebook](https://github.com/fastai/fastai/blob/master/courses/dl1/lesson1-vgg.ipynb)を参考にしながらPaperspace上で動かしてKaggleへSubmitするところまでやります。
@@ -26,13 +25,11 @@ tags:
 私の[Referral Code](https://www.paperspace.com/&R=QM07TPE)を使って登録すると$5分のクレジットが貰えるようです。
 登録後はGradientを選択し、Paperspace + Fast.AI -> P5000 と選択しNotebookを作成し、OpenをクリックするとJupyter Notebookを開けます。
 
-
 使用後はStopするのを忘れずに。
 
 ## Kaggleからデータのダウンロード&下準備
 
 データのダウンロードにはKaggleへのユーザ登録と当該Competitionのルールの確認と同意が必要なので済ませておきます。
-
 
 次に、[KaggleのCLIツール](https://github.com/Kaggle/kaggle-api)を使いたいのでMy Accountへ移動し、Create New API Tokenからトークンを作成します。
 
@@ -47,6 +44,7 @@ tags:
 ```
 
 必要なデータをダウンロードします。
+
 ```
 !kaggle competitions download -c dogs-vs-cats-redux-kernels-edition
 ```
@@ -58,6 +56,7 @@ tags:
 ```
 
 データを解凍します。
+
 ```python
 import os
 os.chdir('/notebooks/data/dogs-vs-cats-redux-kernels-edition')
@@ -67,6 +66,7 @@ os.chdir('/notebooks/data/dogs-vs-cats-redux-kernels-edition')
 ```
 
 必要なディレクトリを作成します。
+
 ```
 !mkdir -p /notebooks/data/dogs-vs-cats-redux-kernels-edition/train/dogs
 !mkdir -p /notebooks/data/dogs-vs-cats-redux-kernels-edition/train/cats
@@ -75,6 +75,7 @@ os.chdir('/notebooks/data/dogs-vs-cats-redux-kernels-edition')
 ```
 
 犬と猫の画像をそれぞれdogsとcatsに移動します。
+
 ```
 import os
 os.chdir('/notebooks/data/dogs-vs-cats-redux-kernels-edition/train/')
@@ -141,10 +142,10 @@ sz=224
 arch=vgg16
 bs=64
 ```
+
 画像のサイズは224x224
 アーキテクチャはvgg16
 Batch Sizeは64を指定します。
-
 
 次にデータの読み込みです。
 
@@ -170,7 +171,7 @@ lrf=learn.lr_find()
 learn.sched.plot()
 ```
 
-![Learning Rate1](lr1.png)
+![Learning Rate1](/img/lr1.png)
 
 0.1あたりですね。
 
@@ -201,10 +202,9 @@ learn.bn_freeze(True)
 ```
 
 6. Set earlier layers to 3x-10x lower learning rate than next higher layer. Rule of thumb: 10x for ImageNet like images, 3x for satellite or medical imaging
-
 7. Use `lr_find()` again (Note: if you call `lr_find` having set differential learning rates, what it prints out is the learning rate of the last layers.)
 
-![Learning Rate1](lr1.png)
+![Learning Rate1](/img/lr2.png)
 
 最後のLayerに0.001を指定してみました。
 
@@ -220,32 +220,27 @@ learn.fit([1e-5, 1e-4,1e-3], 1, cycle_len=1)
 learn.fit(1e-4, 3, cycle_len=1, cycle_mult=2)
 ```
 
-Epochに3、cycle\_lenに1、cycle\_multに3が設定されていると合計で7エポックが実行されます。
+Epochに3、cycle_lenに1、cycle_multに3が設定されていると合計で7エポックが実行されます。
 
 cycle_lenが1で3 epochなので、まず1 epoch目が走ります。
 
-
 ↓
 
-
-２エポック目が走りますが、cycle\_lenが1、cycle\_multが2なので1*2でcycle\_len=2となり合計２エポックが走ります。(ここまで３エポック)
-
+２エポック目が走りますが、cycle_lenが1、cycle_multが2なので1*2でcycle_len=2となり合計２エポックが走ります。(ここまで３エポック)
 
 ↓
-
 
 ３エポック目が走るがcycle_lenが2、cycle_multが2なのでcycle_len=4となり合計４エポックが走る　→ 全部で1 + 2 + 4 で合計７エポックとなります。
 
-| epoch     |trn_loss  |val_loss  |accuracy|   
-| ---       | ---      |  ---     |  ---   | 
-|    0      |0.028313   |0.028708   |0.99125|   
-|    1      |0.031285   |0.028988   |0.99225|                      
-|    2      |0.020249   |0.028794   |0.992|                        
-|    3      |0.015215   |0.031133   |0.991|                        
-|    4      |0.016653   |0.029284   |0.992|                        
-|    5      |0.01551    |0.028878   |0.992|                        
-|    6      |0.016349   |0.028807   |0.992|
-
+| epoch | trn_loss | val_loss | accuracy |
+| ----- | -------- | -------- | -------- |
+| 0     | 0.028313 | 0.028708 | 0.99125  |
+| 1     | 0.031285 | 0.028988 | 0.99225  |
+| 2     | 0.020249 | 0.028794 | 0.992    |
+| 3     | 0.015215 | 0.031133 | 0.991    |
+| 4     | 0.016653 | 0.029284 | 0.992    |
+| 5     | 0.01551  | 0.028878 | 0.992    |
+| 6     | 0.016349 | 0.028807 | 0.992    |
 
 これで学習が終わったので念の為モデルを保存しておきます。
 
@@ -257,10 +252,8 @@ learn.save('tmp2')
 
 あとは結果の確認と提出です。
 
-
-is\_test=Trueを指定することで検証用データセットの代わりにテスト用データを利用します。
-``'NoneType' object is not iterable``とか言われた場合はデータ読み込み時のtest_nameに正しいテスト用ディレクトリ名がセットされているか確認してください。
-
+is_test=Trueを指定することで検証用データセットの代わりにテスト用データを利用します。
+`'NoneType' object is not iterable`とか言われた場合はデータ読み込み時のtest_nameに正しいテスト用ディレクトリ名がセットされているか確認してください。
 
 ```python
 log_preds, y = learn.TTA(is_test=True)
@@ -278,7 +271,6 @@ ds.insert(0, 'id', [o[5:-4] for o in data.test_ds.fnames])
 
 提出フォーマットを見るとヘッダ部分が`id, label`になっていますが、作成したData Frameでは`id, cats, dogs`となっているので整形します。
 
-
 labelには画像が犬である確率を入れれば良いようなのでcatsの列を削除し、dogsの列をlabelにリネームします。
 
 ```python
@@ -287,7 +279,7 @@ ds = ds.rename(columns={'dogs': 'label'})
 ds.head()
 ```
 
-![Data Frame](table.png)
+![Data Frame](/img/table.png)
 
 これで正しい形式になったのでCSVにして保存します。
 
@@ -303,8 +295,7 @@ ds.to_csv(f'{SUBM}subm.gz', compression='gzip', index=False)
 !kaggle competitions submit -c dogs-vs-cats-redux-kernels-edition -f /notebooks/data/dogs-vs-cats-redux-kernels-edition/sub/subm.gz -m "My first submission"
 ```
 
-![Submit](submit.png)
-
+![Submit](/img/submit.png)
 
 ## 感想
 
