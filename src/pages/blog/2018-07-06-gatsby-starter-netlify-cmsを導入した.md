@@ -61,5 +61,6 @@ https://割当てられたURL/admin にアクセスするとログイン画面�
   * gatsby-remark-smartypants
   * [gatsby-remark-prismjsはスタイルがblumaと一部コンフリクトするのでスタイルを追加する](https://github.com/kunihiko-t/gatsby-starter-netlify-cms/blob/3ad6ed1016d3c7a7de4e4f2e5fcd69fdc862ed8e/src/layouts/all.sass#L45)
 * [各種SNSのシェアボタン追加](https://github.com/kunihiko-t/gatsby-starter-netlify-cms/blob/3ad6ed1016d3c7a7de4e4f2e5fcd69fdc862ed8e/src/templates/blog-post.js#L49)
+* [editorial_workflowを有効にして下書きを可能にする](https://github.com/kunihiko-t/gatsby-starter-netlify-cms/blob/23e446c449d2dc1005c651a1d8c9db62da0ee4c7/static/admin/config.yml#L7)
 
 こんな感じでちょこちょこ改造していけばいい感じになりそうです。
