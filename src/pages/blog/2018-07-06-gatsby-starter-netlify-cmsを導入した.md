@@ -54,9 +54,8 @@ https://割当てられたURL/admin にアクセスするとログイン画面�
 
 * [Productページは今必要ないので消しておく](https://github.com/kunihiko-t/gatsby-starter-netlify-cms/blob/3ad6ed1016d3c7a7de4e4f2e5fcd69fdc862ed8e/src/components/Navbar.js#L22)
 * [ロゴを差し替える](https://github.com/kunihiko-t/gatsby-starter-netlify-cms/blob/3ad6ed1016d3c7a7de4e4f2e5fcd69fdc862ed8e/src/components/Navbar.js#L15)
-* [Productページは今必要ないので消しておく](https://github.com/kunihiko-t/gatsby-starter-netlify-cms/blob/3ad6ed1016d3c7a7de4e4f2e5fcd69fdc862ed8e/src/components/Navbar.js#L22)
 * Markdownの機能拡張
-  * gatsby-remark-prismjs
+* * gatsby-remark-prismjs
   * gatsby-remark-katex
   * gatsby-remark-smartypants
   * [gatsby-remark-prismjsはスタイルがblumaと一部コンフリクトするのでスタイルを追加する](https://github.com/kunihiko-t/gatsby-starter-netlify-cms/blob/3ad6ed1016d3c7a7de4e4f2e5fcd69fdc862ed8e/src/layouts/all.sass#L45)
