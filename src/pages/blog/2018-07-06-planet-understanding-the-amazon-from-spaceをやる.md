@@ -6,6 +6,7 @@ description: Fast.AIのPart1 Lesson3あたり
 tags:
   - Deep Learning
   - Fast.AI
+  - kaggle
 ---
 ## 下準備
 
