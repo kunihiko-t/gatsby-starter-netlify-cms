@@ -4,8 +4,8 @@ title: Dogs vs. Cats Reduxを解いてKaggleにsubmitした時のメモ
 date: '2018-07-02T17:47:25+09:00'
 description: 'Fast.AIのPart1 Lesson1,2あたり'
 tags:
-  - deep learning
-  - fastai
+  - Deep Learning
+  - Fast.AI
   - kaggle
 ---
 [Fast.ai](http://www.fast.ai/)の[Deep Learning Part 1: Practical Deep Learning for Coders](http://course.fast.ai/)の動画を観たり課題を解いたりした時のメモです。
