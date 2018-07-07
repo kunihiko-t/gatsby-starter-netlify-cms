@@ -1,0 +1,167 @@
+---
+templateKey: blog-post
+title: React Component構築時のパターンメモ
+date: '2018-07-07T21:08:04+09:00'
+description: 忘れがちなのですぐ参照できるように
+tags:
+  - react
+---
+Reactを使ってアプリを作る時にどうするのが良いんだっけ？ってなりがちなのでメモ
+
+数値入力フィールドを２つ持ち、足し算の結果を表示するコンポーネントをベースにして考える。
+
+```es6
+import { Component } from "react";
+import React from "react";
+
+class AdderApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { sum: 0, left: 0, right: 0 };
+    this.handleOnChangeLeft = this.handleOnChangeLeft.bind(this);
+    this.handleOnChangeRight = this.handleOnChangeRight.bind(this);
+  }
+
+  handleOnChangeLeft(e) {
+    const il = parseInt(e.target.value);
+    this.setState({ left: il, sum: il + this.state.right });
+  }
+
+  handleOnChangeRight(e) {
+    const ir = parseInt(e.target.value);
+    this.setState({ right: ir, sum: ir * this.state.left });
+  }
+
+  render() {
+    const { left = 0, right = 0 } = this.state;
+    return (
+      <div>
+        <input type="number" value={left} onChange={this.handleOnChangeLeft} />
+        +
+        <input
+          type="number"
+          value={right}
+          onChange={this.handleOnChangeRight}
+        />
+        = {left + right}
+      </div>
+    );
+  }
+}
+
+export default AdderApp;
+
+```
+
+
+## Render Props
+
+```es6:App.js
+import { Component } from "react";
+import React from "react";
+import Adder from "./Adder";
+import Exp from "./Exp";
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Adder render={sum => <Exp sum={sum} />} />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+```
+
+```es6:App.js
+import { Component } from "react";
+import React from "react";
+import Adder from "./Adder";
+import Exp from "./Exp";
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Adder render={sum => <Exp sum={sum} />} />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+```
+
+```es6:Adder.js
+
+import { Component } from "react";
+import React from "react";
+
+class Adder extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { sum: 0, left: 0, right: 0 };
+    this.handleOnChangeLeft = this.handleOnChangeLeft.bind(this);
+    this.handleOnChangeRight = this.handleOnChangeRight.bind(this);
+  }
+
+  handleOnChangeLeft(e) {
+    const il = parseInt(e.target.value);
+    this.setState({ left: il, sum: il + this.state.right });
+  }
+
+  handleOnChangeRight(e) {
+    const ir = parseInt(e.target.value);
+    this.setState({ right: ir, sum: ir * this.state.left });
+  }
+
+  render() {
+    const { left = 0, right = 0 } = this.state;
+    return (
+      <div>
+        <input type="number" value={left} onChange={this.handleOnChangeLeft} />
+        +
+        <input
+          type="number"
+          value={right}
+          onChange={this.handleOnChangeRight}
+        />
+        = {left + right}
+        {this.props.render(this.state.sum)}
+      </div>
+    );
+  }
+}
+
+export default Adder;
+
+```
+
+```es6:Exp.js
+import { Component } from "react";
+import React from "react";
+
+class Exp extends Component {
+  render() {
+    const { sum = 0 } = this.props;
+    return <div>{`${sum}^2 = ${Math.pow(sum, 2)}`}</div>;
+  }
+}
+
+export default Exp;
+
+```
+
+## Compound Components
+
+## Higher Order Components
+
+
+
+https://reactpatterns.com/
+
+
