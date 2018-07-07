@@ -2,55 +2,11 @@
 templateKey: blog-post
 title: React Component構築時のパターンメモ
 date: '2018-07-07T21:08:04+09:00'
-description: 忘れがちなのですぐ参照できるように
+description: 'Render Props, Compound Components, Higher Order Components'
 tags:
   - react
 ---
-Reactを使ってアプリを作る時にどうするのが良いんだっけ？ってなりがちなのでメモ
-
-数値入力フィールドを２つ持ち、足し算の結果を表示するコンポーネントをベースにして考える。
-
-```es6
-import { Component } from "react";
-import React from "react";
-
-class AdderApp extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { sum: 0, left: 0, right: 0 };
-    this.handleOnChangeLeft = this.handleOnChangeLeft.bind(this);
-    this.handleOnChangeRight = this.handleOnChangeRight.bind(this);
-  }
-
-  handleOnChangeLeft(e) {
-    const il = parseInt(e.target.value);
-    this.setState({ left: il, sum: il + this.state.right });
-  }
-
-  handleOnChangeRight(e) {
-    const ir = parseInt(e.target.value);
-    this.setState({ right: ir, sum: ir * this.state.left });
-  }
-
-  render() {
-    const { left = 0, right = 0 } = this.state;
-    return (
-      <div>
-        <input type="number" value={left} onChange={this.handleOnChangeLeft} />
-        +
-        <input
-          type="number"
-          value={right}
-          onChange={this.handleOnChangeRight}
-        />
-        = {left + right}
-      </div>
-    );
-  }
-}
-
-export default AdderApp;
-```
+Reactを使ってアプリを作る時にどう書くのが良いだっけ？ってなりがちなのでメモ。
 
 ## Render Props
 
@@ -62,7 +18,46 @@ export default AdderApp;
 
 みたいな感じでrenderを利用いてコンポーネントを再利用するテクニック。
 
-ベースとなるコンポーネントをこの方法で書き換えると下記のようになる。
+数値入力フィールドを２つ持ち、足し算の結果を表示するコンポーネントをベースにして考える。
+
+```es6
+import { Component } from "react";
+import React from "react";
+class AdderApp extends Component {
+constructor(props) {
+super(props);
+this.state = { sum: 0, left: 0, right: 0 };
+this.handleOnChangeLeft = this.handleOnChangeLeft.bind(this);
+this.handleOnChangeRight = this.handleOnChangeRight.bind(this);
+}
+handleOnChangeLeft(e) {
+const il = parseInt(e.target.value);
+this.setState({ left: il, sum: il + this.state.right });
+}
+handleOnChangeRight(e) {
+const ir = parseInt(e.target.value);
+this.setState({ right: ir, sum: ir * this.state.left });
+}
+render() {
+const { left = 0, right = 0 } = this.state;
+return (
+<div>
+<input type="number" value={left} onChange={this.handleOnChangeLeft} />
++
+<input
+type="number"
+value={right}
+onChange={this.handleOnChangeRight}
+/>
+= {left + right}
+</div>
+);
+}
+}
+export default AdderApp;
+```
+
+Render Propsを使ってで再利用可能なコンポーネントに書き換えると下記のようになる。
 
 ```es6
 //App.js
@@ -129,6 +124,7 @@ export default Adder;
 ```
 
 合計値を二乗するコンポーネントで再利用する。
+
 ```es6
 //Exp.js
 import { Component } from "react";
@@ -144,7 +140,7 @@ class Exp extends Component {
 export default Exp;
 ```
 
-詳しくこのあたりを
+詳しくこのあたりをどうぞ。
 
 <https://reactjs.org/docs/render-props.html>
 
