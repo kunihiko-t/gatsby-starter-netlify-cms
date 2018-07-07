@@ -50,13 +50,22 @@ class AdderApp extends Component {
 }
 
 export default AdderApp;
-
 ```
-
 
 ## Render Props
 
-```es6:App.js
+```es6
+<DataProvider render={data => (
+  <h1>Hello {data.target}</h1>
+)}/>
+```
+
+みたいな感じでrenderを利用いてコンポーネントを再利用するテクニック。
+
+ベースとなるコンポーネントをこの方法で書き換えると下記のようになる。
+
+```es6
+//App.js
 import { Component } from "react";
 import React from "react";
 import Adder from "./Adder";
@@ -73,31 +82,10 @@ class App extends Component {
 }
 
 export default App;
-
 ```
 
-```es6:App.js
-import { Component } from "react";
-import React from "react";
-import Adder from "./Adder";
-import Exp from "./Exp";
-
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Adder render={sum => <Exp sum={sum} />} />
-      </div>
-    );
-  }
-}
-
-export default App;
-
-```
-
-```es6:Adder.js
-
+```es6
+//Adder.js
 import { Component } from "react";
 import React from "react";
 
@@ -138,10 +126,11 @@ class Adder extends Component {
 }
 
 export default Adder;
-
 ```
 
-```es6:Exp.js
+合計値を二乗するコンポーネントで再利用する。
+```es6
+//Exp.js
 import { Component } from "react";
 import React from "react";
 
@@ -153,15 +142,14 @@ class Exp extends Component {
 }
 
 export default Exp;
-
 ```
+
+詳しくこのあたりを
+
+<https://reactjs.org/docs/render-props.html>
 
 ## Compound Components
 
 ## Higher Order Components
 
-
-
 https://reactpatterns.com/
-
-
