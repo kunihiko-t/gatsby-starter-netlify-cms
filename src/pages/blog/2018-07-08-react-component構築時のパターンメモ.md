@@ -183,6 +183,26 @@ export default HoCAdder(HoCApp);
 
 <https://reactjs.org/docs/higher-order-components.html>
 
-
-
 ## Compound Components
+
+
+
+How To Master Advanced React Design Patterns: Compound Components
+
+<https://itnext.io/using-advanced-design-patterns-to-create-flexible-and-reusable-react-components-part-1-dd495fa1823>
+
+
+
+How To Master Advanced React Design Patterns: Context API
+
+<https://itnext.io/using-advanced-design-patterns-to-create-flexible-and-reusable-react-components-part-2-react-3c5662b997ab>
+
+記事内で説明に利用されているコードはここ
+
+<https://codesandbox.io/s/lp6mn91557?from-embed>
+
+
+
+3 easy steps to writing compound components
+
+<https://hackernoon.com/3-easy-steps-to-writing-compound-components-5d4647b7bb7>
