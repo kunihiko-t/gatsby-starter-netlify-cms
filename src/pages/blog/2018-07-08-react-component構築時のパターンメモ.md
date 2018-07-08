@@ -160,7 +160,7 @@ export default Exp;
 
 下記はRender Propsのところで作ったAdderをHoC化したコード。
 
-```es6
+```javascript
 import { Component } from "react";
 import React from "react";
 import Adder from "./Adder";
