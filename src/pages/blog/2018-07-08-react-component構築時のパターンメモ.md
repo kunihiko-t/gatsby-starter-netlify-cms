@@ -1,7 +1,7 @@
 ---
 templateKey: blog-post
 title: React Component構築時のパターンメモ
-date: '2018-07-07T21:08:04+09:00'
+date: '2018-07-08T21:08:04+09:00'
 description: 'Render Props, Compound Components, Higher Order Components'
 tags:
   - react
@@ -23,38 +23,44 @@ Reactを使ってアプリを作る時にどう書くのが良いだっけ？っ
 ```es6
 import { Component } from "react";
 import React from "react";
+
 class AdderApp extends Component {
-constructor(props) {
-super(props);
-this.state = { sum: 0, left: 0, right: 0 };
-this.handleOnChangeLeft = this.handleOnChangeLeft.bind(this);
-this.handleOnChangeRight = this.handleOnChangeRight.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = { sum: 0, left: 0, right: 0 };
+    this.handleOnChangeLeft = this.handleOnChangeLeft.bind(this);
+    this.handleOnChangeRight = this.handleOnChangeRight.bind(this);
+  }
+
+  handleOnChangeLeft(e) {
+    const il = parseInt(e.target.value);
+    this.setState({ left: il, sum: il + this.state.right });
+  }
+
+  handleOnChangeRight(e) {
+    const ir = parseInt(e.target.value);
+    this.setState({ right: ir, sum: ir * this.state.left });
+  }
+
+  render() {
+    const { left = 0, right = 0 } = this.state;
+    return (
+      <div>
+        <input type="number" value={left} onChange={this.handleOnChangeLeft} />
+        +
+        <input
+          type="number"
+          value={right}
+          onChange={this.handleOnChangeRight}
+        />
+        = {left + right}
+      </div>
+    );
+  }
 }
-handleOnChangeLeft(e) {
-const il = parseInt(e.target.value);
-this.setState({ left: il, sum: il + this.state.right });
-}
-handleOnChangeRight(e) {
-const ir = parseInt(e.target.value);
-this.setState({ right: ir, sum: ir * this.state.left });
-}
-render() {
-const { left = 0, right = 0 } = this.state;
-return (
-<div>
-<input type="number" value={left} onChange={this.handleOnChangeLeft} />
-+
-<input
-type="number"
-value={right}
-onChange={this.handleOnChangeRight}
-/>
-= {left + right}
-</div>
-);
-}
-}
+
 export default AdderApp;
+
 ```
 
 Render Propsを使ってで再利用可能なコンポーネントに書き換えると下記のようになる。
@@ -152,7 +158,7 @@ export default Exp;
 
 コンポーネントを受け取ってコンポーネントを返す関数。
 
-下記はRender Propsのところで作ったAdderをHoC化したコード
+下記はRender Propsのところで作ったAdderをHoC化したコード。
 
 ```es6
 import { Component } from "react";
@@ -185,24 +191,27 @@ export default HoCAdder(HoCApp);
 
 ## Compound Components
 
+グループ化されたフォームやタブなどを表現する時に使うパターン。
 
+React 16.3以降を使っている場合はContext APIも利用すると尚良い。
+
+良いサンプルが思いつかなかったしコードがちょっと長くなりそうなので詳しく解説してある記事を貼っておきます。
+
+3 easy steps to writing compound components
+
+<https://hackernoon.com/3-easy-steps-to-writing-compound-components-5d4647b7bb7>
+
+Reactのデザインパターン Compound Components
+
+<https://qiita.com/seya/items/d08b8a6c12f3e71d5971>
 
 How To Master Advanced React Design Patterns: Compound Components
 
 <https://itnext.io/using-advanced-design-patterns-to-create-flexible-and-reusable-react-components-part-1-dd495fa1823>
 
-
-
 How To Master Advanced React Design Patterns: Context API
 
 <https://itnext.io/using-advanced-design-patterns-to-create-flexible-and-reusable-react-components-part-2-react-3c5662b997ab>
 
-記事内で説明に利用されているコードはここ
-
-<https://codesandbox.io/s/lp6mn91557?from-embed>
-
-
-
-3 easy steps to writing compound components
-
-<https://hackernoon.com/3-easy-steps-to-writing-compound-components-5d4647b7bb7>
+Ryan Florence - Compound Components
+<https://www.youtube.com/watch?v=hEGg-3pIHlE>
