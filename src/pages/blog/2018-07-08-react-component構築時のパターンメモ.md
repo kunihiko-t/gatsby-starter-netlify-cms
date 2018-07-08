@@ -146,8 +146,43 @@ export default Exp;
 
 <https://reactjs.org/docs/render-props.html>
 
-## Compound Components
+## 
 
 ## Higher Order Components
 
-https://reactpatterns.com/
+コンポーネントを受け取ってコンポーネントを返す関数。
+
+下記はRender Propsのところで作ったAdderをHoC化したコード
+
+```es6
+import { Component } from "react";
+import React from "react";
+import Adder from "./Adder";
+import Exp from "./Exp";
+
+const HoCAdder = Component => {
+  return class extends React.Component {
+    render() {
+      return <Adder render={sum => <Component {...this.props} sum={sum} />} />;
+    }
+  };
+};
+
+class HoCApp extends Component {
+  render() {
+    return (
+      <div>
+        <Exp sum={this.props.sum} />
+      </div>
+    );
+  }
+}
+
+export default HoCAdder(HoCApp);
+```
+
+<https://reactjs.org/docs/higher-order-components.html>
+
+
+
+## Compound Components
