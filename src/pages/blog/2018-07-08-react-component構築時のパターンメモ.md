@@ -10,7 +10,7 @@ Reactを使ってアプリを作る時にどう書くのが良いだっけ？っ
 
 ## Render Props
 
-```es6
+```javascript
 <DataProvider render={data => (
   <h1>Hello {data.target}</h1>
 )}/>
@@ -20,7 +20,7 @@ Reactを使ってアプリを作る時にどう書くのが良いだっけ？っ
 
 数値入力フィールドを２つ持ち、足し算の結果を表示するコンポーネントをベースにして考える。
 
-```es6
+```javascript
 import { Component } from "react";
 import React from "react";
 
@@ -65,7 +65,7 @@ export default AdderApp;
 
 Render Propsを使ってで再利用可能なコンポーネントに書き換えると下記のようになる。
 
-```es6
+```javascript
 //App.js
 import { Component } from "react";
 import React from "react";
@@ -85,7 +85,7 @@ class App extends Component {
 export default App;
 ```
 
-```es6
+```javascript
 //Adder.js
 import { Component } from "react";
 import React from "react";
@@ -133,7 +133,7 @@ export default Adder;
 
 ちょっと例が良くない気がするのでそのうち差し替えるかも。
 
-```es6
+```javascript
 //Exp.js
 import { Component } from "react";
 import React from "react";
