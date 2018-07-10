@@ -100,7 +100,7 @@ def get_data(sz):
                     suffix='.jpg', val_idxs=val_idxs, test_name='test-jpg')
 ```
 
-定義した関数からデータを取得し、検証セット用のデータローダからデータを読み出します。
+定義した関数からデータを取得し、検証セット用のデータローダからデータを読み出してみます。
 
 ```python
 data = get_data(256)
