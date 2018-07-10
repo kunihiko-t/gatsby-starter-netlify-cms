@@ -219,11 +219,14 @@ learn.fit(lrs, 3, cycle_len=1, cycle_mult=2)
 モデルの検証を行います。
 
 ```python
-multi_preds, y = learn.TTA(is_test=True)
+multi_preds, y = learn.TTA()
 preds = np.mean(multi_preds, 0)
 
 f2(preds,y)
 ```
+```
+0.9319441266717777
+```
 
-TODO: is_test=Trueにするとf2が0になる。
-あと、submissionのレコード数が合わない。
+TODO:  `learn.TTA(is_test=True)`にすると`f2(preds,y)`が0になってしまうので調べる
+
