@@ -12,6 +12,8 @@ tags:
 
 [Planet: Understanding the Amazon from Space](https://www.kaggle.com/c/planet-understanding-the-amazon-from-space)をやっていきます。
 
+今回もPaperspaceのGradient°を利用します。
+
 ## 下準備
 
 KaggleのCLIを使えるようにしてデータをダウンロードし、解凍します。
