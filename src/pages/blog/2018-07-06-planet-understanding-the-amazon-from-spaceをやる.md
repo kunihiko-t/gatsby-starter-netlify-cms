@@ -131,8 +131,7 @@ plt.imshow(data.val_ds.denorm(to_np(x))[0]*1.4);
 ![null](/img/planet_lighten.png)
 
 今回扱う画像は犬猫のようにImageNetに存在するようなものではないので、重みデータなどはそのままでは最適化されているとは言えません。
-
-ImageNetの画像サイズは通常224か29９ですが、今回は画像を小さくし、エッジやコーナー、テクスチャのパターンなどを内部レイヤーを利用し識別します。
+衛星写真は犬や猫とは違うものの、エッジやコーナー、テクスチャのパターンといったものの識別をするレイヤーは有用なのでこれらは利用し、追加した最後レイヤーのみ小さい画像を使って学習させます。
 
 小さい画像から始めることは衛星画像などの非標準のデータを学習する時に有効です。
 (動画の[このあたり](https://www.youtube.com/watch?v=9C06ZPF8Uuc&feature=youtu.be&t=1h22m21s)を参照してください)
@@ -163,8 +162,7 @@ lr = 0.2
 learn.fit(lr, 3, cycle_len=1, cycle_mult=2)
 ```
 
-unfreezeを行い、レイヤグループごとに異なるLearning Rateを設定し、さらに学習させます。
-
+今回の場合、内側のレイヤーは外側のレイヤーよりも有用ですが、まだ学習が必要なためunfreezeを行い、レイヤグループごとに異なるLearning Rateを設定し、さらに学習させます。
 
 Easy steps to train a world-class image classifierで言及されていた
 
@@ -196,4 +194,13 @@ learn.freeze()
 learn.fit(lr, 3, cycle_len=1, cycle_mult=2)
 learn.unfreeze()
 learn.fit(lrs, 3, cycle_len=1, cycle_mult=2)
+```
+
+モデル検証を行います。
+
+```python
+multi_preds, y = learn.TTA(is_test=True)
+preds = np.mean(multi_preds, 0)
+
+f2(preds,y)
 ```
