@@ -1,7 +1,7 @@
 ---
 templateKey: blog-post
 title: Planet Understanding the Amazon from Spaceをやる
-date: '2018-07-06T14:17:09+09:00'
+date: '2018-07-11T04:07:09+09:00'
 description: Fast.AIのPart1 Lesson3あたり
 tags:
   - Deep Learning
@@ -10,7 +10,7 @@ tags:
 ---
 今回はLesson3あたりで解説されている
 
-[Planet: Understanding the Amazon from Space](https://www.kaggle.com/c/planet-understanding-the-amazon-from-space)をやっていく。
+[Planet: Understanding the Amazon from Space](https://www.kaggle.com/c/planet-understanding-the-amazon-from-space)をやっていきます。
 
 ## 下準備
 
