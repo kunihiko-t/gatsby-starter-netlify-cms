@@ -113,6 +113,26 @@ yのデータを見るとone-hot encodingされたデータになっています
 list(zip(data.classes, y[0]))
 ```
 
+```
+[('agriculture', 1.0),
+ ('artisinal_mine', 0.0),
+ ('bare_ground', 0.0),
+ ('blooming', 0.0),
+ ('blow_down', 0.0),
+ ('clear', 1.0),
+ ('cloudy', 0.0),
+ ('conventional_mine', 0.0),
+ ('cultivation', 0.0),
+ ('habitation', 0.0),
+ ('haze', 0.0),
+ ('partly_cloudy', 0.0),
+ ('primary', 1.0),
+ ('road', 0.0),
+ ('selective_logging', 0.0),
+ ('slash_burn', 0.0),
+ ('water', 1.0)]
+```
+
 画像を表示してみます。
 
 ```python
@@ -131,7 +151,7 @@ plt.imshow(data.val_ds.denorm(to_np(x))[0]*1.4);
 ![null](/img/planet_lighten.png)
 
 今回扱う画像は犬猫のようにImageNetに存在するようなものではないので、重みデータなどはそのままでは最適化されているとは言えません。
-衛星写真は犬や猫とは違うものの、エッジやコーナー、テクスチャのパターンといったものの識別をするレイヤーは有用なのでこれらは利用し、追加した最後レイヤーのみ小さい画像を使って学習させます。
+衛星写真は犬や猫とは違うものの、エッジやコーナー、テクスチャのパターンといったものの識別をするレイヤーは有用なのでこれらは利用し、追加した最後レイヤーのみ小さい画像を使ってとりあえず学習させます。
 
 小さい画像から始めることは衛星画像などの非標準のデータを学習する時に有効です。
 (動画の[このあたり](https://www.youtube.com/watch?v=9C06ZPF8Uuc&feature=youtu.be&t=1h22m21s)を参照してください)
@@ -170,7 +190,7 @@ Easy steps to train a world-class image classifierで言及されていた
 
 4. Set earlier layers to 3x-10x lower learning rate than next higher layer. Rule of thumb: 10x for ImageNet like images, 3x for satellite or medical imaging
 
-あたりですね。
+このあたりですね。
 今回は衛星写真なので3xです。
 
 ```python
@@ -196,7 +216,7 @@ learn.unfreeze()
 learn.fit(lrs, 3, cycle_len=1, cycle_mult=2)
 ```
 
-モデル検証を行います。
+モデルの検証を行います。
 
 ```python
 multi_preds, y = learn.TTA(is_test=True)
@@ -204,3 +224,6 @@ preds = np.mean(multi_preds, 0)
 
 f2(preds,y)
 ```
+
+TODO: is_test=Trueにするとf2が0になる。
+あと、submissionのレコード数が合わない。
