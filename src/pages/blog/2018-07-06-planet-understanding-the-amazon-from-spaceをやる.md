@@ -50,7 +50,7 @@ os.chdir('/notebooks/data/planet/')
 
 ## 実装
 
-まず必要なライブラリをインポートいてPATHを設定します。
+まず必要なライブラリをインポートしてPATHを設定します。
 
 ```python
 import os
@@ -69,7 +69,7 @@ from fastai.plots import *
 
 > Submissions will be evaluated based on their mean (F_{2}) score.
 
-と書いてあるのでmetricsとしてf2を指定し、Fast.AI側で用意してれているplanet.pyをインポートし当該関数を指定します。
+と書いてあるのでFast.AI側で用意してれている`planet.py`をインポートしmetricsとしてf2を指定します。
 
 ```python
 from planet import f2
