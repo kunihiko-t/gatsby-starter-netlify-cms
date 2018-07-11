@@ -36,7 +36,7 @@ export const BlogPostTemplate = ({
   const iconSize = 36;
   const filter = count => (count > 0 ? count : "");
   const url = `https://blog.valletta.io/${encodeURIComponent(slug)}`;
-  const disqusShortname = "Blog.Valletta.io";
+  const disqusShortname = "vallettaio";
   const disqusConfig = {
     url: url,
     identifier: slug,
