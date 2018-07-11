@@ -4,7 +4,7 @@ title: React Component構築時のパターンメモ
 date: '2018-07-08T21:08:04+09:00'
 description: 'Render Props, Compound Components, Higher Order Components'
 tags:
-  - react
+  - React
 ---
 Reactを使ってアプリを作る時にどう書くのが良いだっけ？ってなりがちなのでメモ。
 
