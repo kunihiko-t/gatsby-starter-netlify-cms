@@ -14,6 +14,12 @@ tags:
 
 今回もPaperspaceのGradient°を利用します。
 
+動画やコード、動画の解説は下記リンクを参照してください。
+
+* <http://course.fast.ai/lessons/lesson3.html>
+* <https://medium.com/@hiromi_suenaga/deep-learning-2-part-1-lesson-3-74b0ef79e56>
+* <https://github.com/fastai/fastai/blob/master/courses/dl1/lesson2-image_models.ipynb>
+
 ## 下準備
 
 KaggleのCLIを使えるようにしてデータをダウンロードし、解凍します。
@@ -189,7 +195,6 @@ learn.fit(lr, 3, cycle_len=1, cycle_mult=2)
 Easy steps to train a world-class image classifierで言及されていた
 
 3. Unfreeze all layers
-
 4. Set earlier layers to 3x-10x lower learning rate than next higher layer. Rule of thumb: 10x for ImageNet like images, 3x for satellite or medical imaging
 
 このあたりですね。
@@ -202,6 +207,7 @@ learn.fit(lrs, 3, cycle_len=1, cycle_mult=2)
 ```
 
 画像のサイズを大きくして繰り返します。
+
 ```python
 sz=128
 learn.set_data(get_data(sz))
@@ -226,9 +232,9 @@ preds = np.mean(multi_preds, 0)
 
 f2(preds,y)
 ```
+
 ```
 0.9319441266717777
 ```
 
 TODO:  `learn.TTA(is_test=True)`にすると`f2(preds,y)`が0になってしまうので調べる
-
