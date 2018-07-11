@@ -18,6 +18,8 @@ import {
 import Helmet from "react-helmet";
 import Link from "gatsby-link";
 import Content, { HTMLContent } from "../components/Content";
+import Disqus from "disqus-react";
+
 require("prismjs/themes/prism-okaidia.css");
 require(`katex/dist/katex.min.css`);
 
@@ -34,6 +36,12 @@ export const BlogPostTemplate = ({
   const iconSize = 36;
   const filter = count => (count > 0 ? count : "");
   const url = `https://blog.valletta.io/${encodeURIComponent(slug)}`;
+  const disqusShortname = "blog.valletta.io";
+  const disqusConfig = {
+    url: url,
+    identifier: slug,
+    title: title
+  };
 
   return (
     <section className="section">
@@ -110,6 +118,16 @@ export const BlogPostTemplate = ({
                 </ul>
               </div>
             ) : null}
+            <Disqus.CommentCount
+              shortname={disqusShortname}
+              config={disqusConfig}
+            >
+              Comments
+            </Disqus.CommentCount>
+            <Disqus.DiscussionEmbed
+              shortname={disqusShortname}
+              config={disqusConfig}
+            />
           </div>
         </div>
       </div>
