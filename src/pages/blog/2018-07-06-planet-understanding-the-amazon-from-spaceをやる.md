@@ -247,6 +247,8 @@ test_df.to_csv('/notebooks/tmp/sbm2.gz', index_label='image_name', compression='
 ```
 
 こちらの記事よるとthresholdはF2を最大化する数値を指定すると良いらしいのですが、今回は0.2を設定しました。
+
+
 <https://towardsdatascience.com/kaggle-planet-competition-how-to-land-in-top-4-a679ff0013ba>
 
 結果こんな感じでした。
