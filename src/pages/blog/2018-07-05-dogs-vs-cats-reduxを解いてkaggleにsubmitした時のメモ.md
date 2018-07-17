@@ -21,7 +21,11 @@ tags:
 ログインしてメニューを眺めているとGRADIENTというものがあり、これは最近リリースされたもので、起動するとすぐにJupyter Notebookを利用できて、Fast.AIのテンプレートもあるようだったのでこちらを利用することにしました。
 
 一番安いGPUを使うとここでもまたOut of Memoryで怒られたのでP5000というものを選択しました。
+
+
 **(インスタンスの数に制限があるらしく、多数のユーザが使っていると選択肢して表示されないようです。運が良いと選択できます。2018年7月17日追記)**
+
+
 各GPUの価格は[このあたり](https://www.paperspace.com/gpus)を参考に。
 私の[Referral Code](https://www.paperspace.com/&R=QM07TPE)を使って登録すると$5分のクレジットが貰えるようです。
 登録後はGradientを選択し、Paperspace + Fast.AI -> P5000 と選択しNotebookを作成し、OpenをクリックするとJupyter Notebookを開けます。
