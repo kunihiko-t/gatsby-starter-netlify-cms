@@ -246,8 +246,11 @@ test_df = pd.DataFrame(res, index=test_fnames, columns=['tags'])
 test_df.to_csv('/notebooks/tmp/sbm2.gz', index_label='image_name', compression='gzip')
 ```
 
-こちらの記事よるとthresholdはF2を最大化する数値を指定すると良いらしいのですが、今回は0.2を設定しました。
+```python
+!kaggle competitions submit -c planet-understanding-the-amazon-from-space -f /notebooks/tmp/sbm.gz -m "first commit"
+```
 
+こちらの記事よるとthresholdはF2を最大化する数値を指定すると良いらしいのですが、今回は0.2を設定しました。
 
 <https://towardsdatascience.com/kaggle-planet-competition-how-to-land-in-top-4-a679ff0013ba>
 
