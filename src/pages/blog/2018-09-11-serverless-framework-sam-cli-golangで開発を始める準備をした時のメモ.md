@@ -9,7 +9,9 @@ tags:
   - Lambda
   - AWS
 ---
-* [Serverless Framework](https://github.com/serverless/serverless) (AWS Lambda利用)
+## はじめに
+
+* [Serverless Framework](https://github.com/serverless/serverless) (AWS Lambda 利用)
 * SAM CLI
 
 を使ってGolangのウェブアプリを開発する準備をした時のメモです。
@@ -48,15 +50,25 @@ pip install --user aws-sam-cli
 ```
 lambda.Start(Handler)
 ```
+
 となっている箇所を消して`algnhsa.ListenAndServe`を使えば完了です。
 
 すべてリクエストを受けて内部のルータで処理するために、serverless.yml template.yml共にpathとmethodを下記のように書き換えておいてください。
+
 ```
 path: /{proxy+}
 method: ANY
 ```
+
 `/`アクセス時のみmissing tokenとか出て正常処理できないのはバグみたいです。
 
 <https://github.com/awslabs/aws-sam-cli/issues/437>
 
 APIサーバとして利用したいので特に問題なかったです。
+
+## まとめ
+
+* Serverless FrameworkでLambda+Golangの組み合わせを選択する時はオフライン開発にSAM CLIを使うと楽
+* Lambda上でGolang製のウェブアプリを動かしたい時は[algnhsa](https://github.com/akrylysov/algnhsa)を使うと楽
+
+もうちょっと色々触ると問題点も色々と出てきそうですが、とりあえずこれで開発準備が整いました。
