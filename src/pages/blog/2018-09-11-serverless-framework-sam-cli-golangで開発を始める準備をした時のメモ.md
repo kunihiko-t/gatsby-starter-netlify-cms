@@ -4,7 +4,10 @@ title: Serverless Framework + SAM CLI + Golangで開発を始める準備をし�
 date: '2018-09-11T18:11:09+09:00'
 description: Serverless Framework利用時のローカル開発、GolangのWAF利用について調べたのでメモを残しておきます
 tags:
-  - Serverless Golang Lambda AWS
+  - Serverless
+  - Golang
+  - Lambda
+  - AWS
 ---
 * [Serverless Framework](https://github.com/serverless/serverless) (AWS Lambda利用)
 * SAM CLI
