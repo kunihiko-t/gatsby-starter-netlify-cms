@@ -76,7 +76,7 @@ def rmse(y_actual, y_predicted):
 どうもこれは`sklearn.metric.make_scorer`で関数をラップしないといけないらしく、こちらを使い
 
 ```python
-my_scoring = make_scorer(rmse, greater_is_better=True)
+my_scoring = make_scorer(rmse, greater_is_better=False)
 ```
 
 みたいな感じにすることで解決しました。
