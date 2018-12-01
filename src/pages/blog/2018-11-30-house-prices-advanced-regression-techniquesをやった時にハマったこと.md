@@ -61,12 +61,12 @@ concatDataset = concatDataset.drop((missing_data[missing_data['Total'] > 1]).ind
 concatDataset.fillna(value=0, inplace=True)
 ```
 
-### GridSearchCVやKerasのcompile時に渡すmetricsにRMSEが用意されていない
+### GridSearchCVに渡すmetricsにRMSLEが用意されていない
 
-これはどうしたものかと思ったですが、両方とも関数を渡すことができるので
+これはどうしたものかと思ったですが、関数を渡すことができるので
 
 ```python
-def rmse(y_actual, y_predicted):
+def rmsle(y_actual, y_predicted):
    return sqrt(mean_squared_error(y_actual, y_predicted))
 ```
 
@@ -75,21 +75,11 @@ def rmse(y_actual, y_predicted):
 どうもこれは`sklearn.metric.make_scorer`で関数をラップしないといけないらしく、こちらを使い
 
 ```python
-my_scoring = make_scorer(rmse, greater_is_better=True)
+my_scoring = make_scorer(rmsle, greater_is_better=True)
 ```
 
 みたいな感じにすることで解決しました。
 
-しかし、Kerasのcompileにも同じように設定してみるとエラーが発生。
-
-どうもこれはsqrtとかする箇所にKeras側で用意されている関数を使う必要があるらしく
-
-```python
-def root_mean_squared_error(y_true, y_pred):
-        return K.sqrt(K.mean(K.square(y_pred - y_true), axis=-1)) 
-```
-
-とすることで解決しました。
 
 ## おわりに
 
