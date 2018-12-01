@@ -40,3 +40,61 @@ df_test = test_preprocessed
 こんな感じで一度学習用データとテスト用データを結合し、ダミー変数用のカラムを作ってから再び切り離すことで解決しました。
 
 ## 学習時に発生した問題
+
+
+### 欠損値
+
+学習時はLassoやSGDRegressorなど色々試してみたのですが何故かNaNは処理できないよというエラーが発生いました。
+
+データを確認すると、いくつかのカラムに1件だけデータが入っていないセルありました。
+下記のようなコードでデータ欠損値があるカラムを除去していたので１件のみ欠損のあるカラムは残っていたようです。
+
+```python
+concatDataset = concatDataset.drop((missing_data[missing_data['Total'] > 1]).index,1)
+```
+
+1件でも欠損値があればカラムを消すよう変更しようかと考えたですが、消すとまずそうなカラムも含まれていたので、とりあえず`fillna`で回避しました。
+
+当該行だけ消したほうが良かったかも？
+
+```python
+concatDataset.fillna(value=0, inplace=True)
+```
+
+### GridSearchCVやKerasのcompile時に渡すmetricsにRMSEが用意されていない
+
+これはどうしたものかと思ったですが、両方とも関数を渡すことができるので
+
+```python
+def rmse(y_actual, y_predicted):
+   return sqrt(mean_squared_error(y_actual, y_predicted))
+```
+
+こういう関数を定義し、とりあえずGridSearchCVに渡してみたのですが、引数を３つ渡そうとしたのに２つしか受けれないよというエラーが出てきました。
+
+どうもこれは`sklearn.metric.make_scorer`で関数をラップしないといけないらしく、こちらを使い
+
+```python
+my_scoring = make_scorer(rmse, greater_is_better=True)
+```
+
+みたいな感じにすることで解決しました。
+
+しかし、Kerasのcompileにも同じように設定してみるとエラーが発生。
+
+どうもこれはsqrtとかする箇所にKeras側で用意されている関数を使う必要があるらしく
+
+```python
+def root_mean_squared_error(y_true, y_pred):
+        return K.sqrt(K.mean(K.square(y_pred - y_true), axis=-1)) 
+```
+
+とすることで解決しました。
+
+## おわりに
+
+やっぱり機械学習は慣れていないと勝手が分からなすぎて詰まりまくる。
+
+記事とか読んだり動画を観たりしてなんとなく分かった気にならず、ちゃんと手を動かさないとなーと思った。
+
+LeaderBoard観たら1589番だったのでもうちょい調べてスコアを上げたい。
