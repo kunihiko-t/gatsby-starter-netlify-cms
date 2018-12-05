@@ -51,6 +51,12 @@ os.chdir('/notebooks/data/planet/')
 !7z x test-jpg.tar.7z
 !tar -xvf test-jpg.tar
 
+!7z x test-jpg-additional.tar.7z
+!tar -xvf test-jpg-additional.tar
+
+#test-jpg-additionalの中身をtest用ディレクトリに追加する。
+!mv test-jpg-additional/* test-jpg/
+
 !unzip -o train_v2.csv.zip 
 ```
 
@@ -224,17 +230,30 @@ learn.unfreeze()
 learn.fit(lrs, 3, cycle_len=1, cycle_mult=2)
 ```
 
-モデルの検証を行います。
+これで学習終わったので、モデルの検証を行いSubmitします。
 
 ```python
-multi_preds, y = learn.TTA()
-preds = np.mean(multi_preds, 0)
-
-f2(preds,y)
+multi_preds, y = learn.TTA(is_test=True)
+preds = np.mean(multi_preds, axis=0)
 ```
 
-```
-0.9319441266717777
+```python
+threshold = 0.2
+classes = np.array(data.classes, dtype=str)
+res = [" ".join(classes[np.where(pp > threshold)]) for pp in preds] 
+test_fnames = [os.path.basename(f).split(".")[0] for f in data.test_ds.fnames]
+test_df = pd.DataFrame(res, index=test_fnames, columns=['tags'])
+test_df.to_csv('/notebooks/tmp/sbm2.gz', index_label='image_name', compression='gzip')
 ```
 
-TODO:  `learn.TTA(is_test=True)`にすると`f2(preds,y)`が0になってしまうので調べる
+```python
+!kaggle competitions submit -c planet-understanding-the-amazon-from-space -f /notebooks/tmp/sbm.gz -m "first commit"
+```
+
+こちらの記事よるとthresholdはF2を最大化する数値を指定すると良いらしいのですが、今回は0.2を設定しました。
+
+<https://towardsdatascience.com/kaggle-planet-competition-how-to-land-in-top-4-a679ff0013ba>
+
+結果こんな感じでした。
+
+![Kaggle Result](/img/planet.png)

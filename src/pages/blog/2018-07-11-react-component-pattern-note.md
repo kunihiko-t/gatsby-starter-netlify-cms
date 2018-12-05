@@ -1,12 +1,12 @@
 ---
 templateKey: blog-post
-title: React Component構築時のパターンメモ
-date: '2018-07-08T21:08:04+09:00'
-description: 'Render Props, Compound Components, Higher Order Components'
+title: React Component Pattern Note
+date: '2018-07-11T19:51:08+09:00'
+description: 'Note to self: Render Props, Compound Components, Higher Order Components'
 tags:
   - React
 ---
-Reactを使ってアプリを作る時にどう書くのが良いだっけ？ってなりがちなのでメモ。
+This article is a React Component Design Pattern note for myself.
 
 ## Render Props
 
@@ -16,9 +16,10 @@ Reactを使ってアプリを作る時にどう書くのが良いだっけ？っ
 )}/>
 ```
 
-みたいな感じで文字通りrender propsを利用いてコンポーネントを再利用するテクニック。
+Like above code, it literally use render prop for reuse components.
 
-数値入力フィールドを２つ持ち、足し算の結果を表示するコンポーネントをベースにして考える。
+In this case, we use following code as an example.
+This example has two input field and just sum up them.
 
 ```javascript
 import { Component } from "react";
@@ -63,7 +64,7 @@ export default AdderApp;
 
 ```
 
-Render Propsを使ってで再利用可能なコンポーネントに書き換えると下記のようになる。
+Using render props make above code reusable, like following.
 
 ```javascript
 //App.js
@@ -129,9 +130,9 @@ class Adder extends Component {
 export default Adder;
 ```
 
-合計値を二乗するコンポーネントで再利用する。
+Reuse it with a component squaring the total value.
 
-ちょっと例が良くない気がするのでそのうち差し替えるかも。
+It seems like a bad example, so I may change it sooner or later.
 
 ```javascript
 //Exp.js
@@ -148,7 +149,7 @@ class Exp extends Component {
 export default Exp;
 ```
 
-詳しくこのあたりをどうぞ。
+Please refer this article for details.
 
 <https://reactjs.org/docs/render-props.html>
 
@@ -156,9 +157,10 @@ export default Exp;
 
 ## Higher Order Components
 
-コンポーネントを受け取ってコンポーネントを返す関数。
+A function that receives a component and returns a component.
 
 下記はRender Propsのところで作ったAdderをHoC化したコード。
+Following code is a HoC example using a Render Props example.
 
 ```javascript
 import { Component } from "react";
@@ -191,11 +193,11 @@ export default HoCAdder(HoCApp);
 
 ## Compound Components
 
-グループ化されたフォームやタブなどを表現する時に使うパターン。
+The pattern that represents like a Grouped form, Tabs, etc.
 
-React 16.3以降を使っている場合はContext APIも利用すると尚良い。
+If you use React 16.3 or later, you'd better to use Context API.
 
-良いサンプルが思いつかなかったしコードがちょっと長くなりそうなので詳しく解説してある記事を貼っておきます。
+I couldn't think of any good examples and code will be little long, so I'll put some links that explains about Compound Components.
 
 3 easy steps to writing compound components
 
