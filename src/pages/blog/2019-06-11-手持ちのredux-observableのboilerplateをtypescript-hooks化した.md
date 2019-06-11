@@ -222,9 +222,14 @@ export const fetchRepositories: Epic<AnyAction> = (action$) => action$.pipe(
 コードはすっきりしてこの書き方のほうが好きなんですが、型エラーがでた時にエラーメッセージがすさまじく長くて一体どこの型どうまずいのか非常に分かりにくくて辛かったです。
 
 ## 6. React ReduxのHooks利用
-React側のHooks使うんだから、Reduxでも用意されてるHooksを使いたいと思い、対応している7.1.0-rc.1も出ていたので使っていくことにしました。（この記事執筆時点で丁度7.1.0が出ました）
+React側のHooks使うんだから、Reduxでも用意されてるHooksを使いたいと思い、対応している7.1.0-rc.1も出ていたので使っていくことにしました。（この記事執筆時点で丁度7.1.0が出ましたが型定義は7.0.9のまま。。）
 
 導入は割と楽にできて、`connect`や`mapStateToProps`が不要なり、代わりに`useSelector`を使うようにしたり、propsから取ってきていたdispatchを`userDispatch`から取得したりするだけで簡単に移行できました。
 コード見たほうが早いと思います。
 [https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/routes/Home.tsx](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/routes/Home.tsx)
 
+## 7. やってみた感想
+
+epic周りのエラーを修正している時が一番しんどかったです。
+React ReduxのHooksやtype-script-fsaのおかげでコードがシンプルになり、TypeScriptのおかげでエディタの補完機能がいい感じに効くようになるのはかなり良いなぁと思いました。
+最近next.jsで`next export`という機能があると知ったので次はnext.jsで動くようにしたいと思っています。
