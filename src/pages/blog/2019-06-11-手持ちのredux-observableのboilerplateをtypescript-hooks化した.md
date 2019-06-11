@@ -68,7 +68,7 @@ react-redux 7.1.0も型定義がありませんでした。
 [https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts)
 
 ## typescript-fsaの導入
-せっかくTypeScript化したのだからその恩恵をもっと受けようお思い[typescript-fsa](https://github.com/aikoven/typescript-fsa)を導入しました。
+せっかくTypeScript化したのだからその恩恵をもっと受けようと思い[typescript-fsa](https://github.com/aikoven/typescript-fsa)を導入しました。
 
 これの何が嬉しいのかというと、これが↓
 ```javascript
@@ -88,7 +88,7 @@ export function login() {
 }
 ```
 
-こうなり↓
+こうなり、
 ```typescript
 const keyMirror = require('fbjs/lib/keyMirror')
 
@@ -117,3 +117,43 @@ export default {
     login: ac.async<LoginParam, LoginResult, LoginError>(ActionTypes.USER_LOGIN),
     }
 ```
+
+`typescript-fsa-reducers`を併せて使うことで
+reducerもこんな感じで書けるようになってコードとてもスッキリします。
+
+```typescript
+import immutable from 'immutability-helper'
+import { reducerWithInitialState } from 'typescript-fsa-reducers'
+import actions from '../actions/user'
+
+export const userState = {
+    isAuthenticated: false,
+    status: 'idle',
+}
+
+export default {
+    user: reducerWithInitialState(userState)
+        .case(actions.login.started, (state, action) => {
+            return immutable(state, {
+                status: { $set: 'running' },
+            })
+        })
+        .case(actions.login.done, (state, action) => {
+            return immutable(state, {
+                status: { $set: 'idle' },
+                isAuthenticated: { $set: true },
+            })
+        })
+        .case(actions.login.failed, (state, action) => {
+            return immutable(state, {
+                status: { $set: 'running' },
+                isAuthenticated: { $set: false },
+            })
+        }) ........
+```
+今回はredux-observableも利用するので[typescript-fsa-redux-observable](https://github.com/m0a/typescript-fsa-redux-observable)も導入しました。
+こちらを利用することで
+```typescript
+ofAction(actions.login.started)
+```
+のようにepicを書くことができてとても嬉しいのですが、１点注意事項があって、`yarn add typescript-fsa-redux-observable` でインストールできるtypescript-fsa-redux-observableはちょっと古いようで、githubのREADMEのような記述をするには`yarn add https://github.com/m0a/typescript-fsa-redux-observable`と直接githubのrepositoryを指定する必要がありました。
