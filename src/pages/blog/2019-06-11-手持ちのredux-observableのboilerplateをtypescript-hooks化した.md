@@ -48,7 +48,7 @@ const repositoryList: React.FC<{ items: GithubRepository[], total_count: number,
 ```
 最初はめんどくさいなーとか思ってやってましたが、ちゃんと型定義することでPropTypesとか書かなくて良くなり無駄なコードが減ってエディタの補完にも優しくフロントでも型あったほうが良いなぁと思うようになりました。
 
-### 3. ライブラリの型がない
+## 3. ライブラリの型がない
 だいたいの新しめのライブラリには型定義があり、 `yarn add @types/ライブラリ名`　でインストールできます。
 
 ただ、新しすぎるライブラリや古いライブラリなどは型定義がないものもあるようで、今回[Hooks](https://react-redux.js.org/next/api/hooks)のために入れた
@@ -67,3 +67,53 @@ react-redux 7.1.0も型定義がありませんでした。
 `src/@types/react-redux.d.ts`を作りそこに型定義を書きました。
 [https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts)
 
+## typescript-fsaの導入
+せっかくTypeScript化したのだからその恩恵をもっと受けようお思い[typescript-fsa](https://github.com/aikoven/typescript-fsa)を導入しました。
+
+これの何が嬉しいのかというと、これが↓
+```javascript
+import keyMirror from 'fbjs/lib/keyMirror';
+
+export const ActionTypes = keyMirror({
+    USER_LOGIN_REQUEST: undefined,
+    USER_LOGIN_SUCCESS: undefined,
+    USER_LOGIN_FAILURE: undefined,
+})
+
+export function login() {
+    return {
+        type: ActionTypes.USER_LOGIN_REQUEST,
+        payload: { id: 'test' },
+    };
+}
+```
+
+こうなり↓
+```typescript
+const keyMirror = require('fbjs/lib/keyMirror')
+
+export const ActionTypes = keyMirror({
+    USER_LOGIN: undefined,
+})
+
+
+import actionCreatorFactory from 'typescript-fsa'
+
+const ac = actionCreatorFactory()
+
+interface LoginParam {
+    id: string
+}
+
+interface LoginResult {
+    data: any
+}
+
+interface LoginError {
+    error: string
+}
+
+export default {
+    login: ac.async<LoginParam, LoginResult, LoginError>(ActionTypes.USER_LOGIN),
+    }
+```
