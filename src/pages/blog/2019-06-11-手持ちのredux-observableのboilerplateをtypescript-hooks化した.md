@@ -156,4 +156,67 @@ export default {
 ```typescript
 ofAction(actions.login.started)
 ```
-のようにepicを書くことができてとても嬉しいのですが、１点注意事項があって、`yarn add typescript-fsa-redux-observable` でインストールできるtypescript-fsa-redux-observableはちょっと古いようで、githubのREADMEのような記述をするには`yarn add https://github.com/m0a/typescript-fsa-redux-observable`と直接githubのrepositoryを指定する必要がありました。
+のようにepicを書くことができてとても嬉しいのですが、１点注意事項があって、`yarn add typescript-fsa-redux-observable` でインストールできるtypescript-fsa-redux-observableはちょっと古いようで、githubのrepositoryにあるREADMEのような記述をするには`yarn add https://github.com/m0a/typescript-fsa-redux-observable`と直接githubのrepositoryを指定する必要がありました。
+
+## Epicの修正 rxjs5->6
+自分が使っていたrxjsが5系だったので、ついでだから6系に上げようと思ったら結構仕様が変わっていて、さらにTypeScript化することもあいまってなかなか大変でした。
+
+rxjs5系では . で繋げてこんな感じで書いていたのですが
+```javascript
+export function fetchRepositories(action$) {
+    return action$
+        .ofType(ActionTypes.FETCH_REPOSITORIES_REQUEST)
+        .delay(1000)
+        .mergeMap(param =>
+            Observable.defer(() =>
+                Observable.fromPromise(
+                    axios.get(
+                        `${ApiBaseUrl}/github/repositories?installation_id=${
+                            param.payload.installationID
+                        }`
+                    )
+                )
+            ).map(data => {
+                return {
+                    type: ActionTypes.FETCH_REPOSITORIES_SUCCESS,
+                    payload: { response: data.data },
+                };
+            })
+        )
+        .catch(error =>
+            Observable.of({
+                type: ActionTypes.FETCH_REPOSITORIES_FAILURE,
+                payload: { error },
+                error: true,
+            })
+        );
+}
+```
+
+rxjs6 + typescript-fsa-redux-observable　ではちょっと内容が違いますがこんなノリになります。
+pipeで繋げる感じになって、method chainで呼び出すのではなく、関数を個別で呼び出す感じです。
+```typescript
+export const fetchRepositories: Epic<AnyAction> = (action$) => action$.pipe(
+    ofAction(actions.fetchRepositories.started),
+    debounceTime(1000),
+    mergeMap((param) =>
+        ajax.getJSON(`https://api.github.com/search/repositories?q=+language:javascript+created:%3E2016-10-01&sort=stars&order=desc`).pipe(
+            map(data => {
+                return actions.fetchRepositories.done({
+                    params: param.payload,
+                    result: { repositories: data },
+                })
+            }),
+            catchError(error =>
+                Observable.of(actions.fetchRepositories.failed({
+                    params: param.payload,
+                    error: error,
+                })),
+            ),
+        ),
+    ),
+)
+```
+[https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/epics/github.ts](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/epics/github.ts)
+
+コードはすっきりしてこの書き方のほうが好きなんですが、型エラーがでた時にエラーメッセージがすさまじく長くて一体どこの型どうまずいのか非常に分かりにくくて辛かったです。
