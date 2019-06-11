@@ -11,11 +11,11 @@ tags:
 ---
 何か開発を始める時に度々使っていたredux-observableのboilerplateがちょっと古くなってきたので、この際TypeScript化してHooksも使うようにしてrxjsも5系から6系に上げよう！と思いたち、なんとか動くところまで持っていけたので、同じような事をしようとしてる人達と自分の振り返りのために記事として残すことにしました。
 
-ちなみにrepositoryはここ。
+ちなみに成果物はこれ↓
 
  <https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate>
 
-## 1. とりあえず土台を作る
+## とりあえず土台を作る
 
 フルスクラッチで１つ１つ設定など書いていくのが面倒だったので
 
@@ -29,7 +29,7 @@ typescript-eslintなどの設定はこちらを参考にさせていただきま
 
 そして既存のファイルを\*.js -> \*.ts, \*.jsx -> \*.tsx にしてとりあえず突っ込んでいきました。
 
-## 2.　型周りエラーを地道に修正していく
+## 型周りエラーを地道に修正していく
 
 コンポーネント周りなど普通にesで書いてると型定義とかもちろんないのでエラーが出まくります。
 
@@ -48,7 +48,7 @@ const repositoryList: React.FC<{ items: GithubRepository[], total_count: number,
 ```
 最初はめんどくさいなーとか思ってやってましたが、ちゃんと型定義することでPropTypesとか書かなくて良くなり無駄なコードが減ってエディタの補完にも優しくフロントでも型あったほうが良いなぁと思うようになりました。
 
-## 3. ライブラリの型がない
+## ライブラリの型がない
 だいたいの新しめのライブラリには型定義があり、 `yarn add @types/ライブラリ名`　でインストールできます。
 
 ただ、新しすぎるライブラリや古いライブラリなどは型定義がないものもあるようで、今回[Hooks](https://react-redux.js.org/next/api/hooks)のために入れた
@@ -67,7 +67,7 @@ react-redux 7.1.0も型定義がありませんでした。
 `src/@types/react-redux.d.ts`を作りそこに型定義を書きました。
 [https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts)
 
-## 4. typescript-fsaの導入
+## typescript-fsaの導入
 せっかくTypeScript化したのだからその恩恵をもっと受けようと思い[typescript-fsa](https://github.com/aikoven/typescript-fsa)を導入しました。
 
 これの何が嬉しいのかというと、これが↓
@@ -158,7 +158,7 @@ ofAction(actions.login.started)
 ```
 のようにepicを書くことができてとても嬉しいのですが、１点注意事項があって、`yarn add typescript-fsa-redux-observable` でインストールできるtypescript-fsa-redux-observableはちょっと古いようで、githubのrepositoryにあるREADMEのような記述をするには`yarn add https://github.com/m0a/typescript-fsa-redux-observable`と直接githubのrepositoryを指定する必要がありました。
 
-## 5. Epicの修正 rxjs5->6
+## Epicの修正 rxjs5->6
 自分が使っていたrxjsが5系だったので、ついでだから6系に上げようと思ったら結構仕様が変わっていて、さらにTypeScript化することもあいまってなかなか大変でした。
 
 rxjs5系では . で繋げてこんな感じで書いていたのですが
@@ -221,14 +221,14 @@ export const fetchRepositories: Epic<AnyAction> = (action$) => action$.pipe(
 
 コードはすっきりしてこの書き方のほうが好きなんですが、型エラーがでた時にエラーメッセージがすさまじく長くて一体どこの型どうまずいのか非常に分かりにくくて辛かったです。
 
-## 6. React ReduxのHooks利用
+## React ReduxのHooks利用
 React側のHooks使うんだから、Reduxでも用意されてるHooksを使いたいと思い、対応している7.1.0-rc.1も出ていたので使っていくことにしました。（この記事執筆時点で丁度7.1.0が出ましたが型定義は7.0.9のまま。。）
 
 導入は割と楽にできて、`connect`や`mapStateToProps`が不要なり、代わりに`useSelector`を使うようにしたり、propsから取ってきていたdispatchを`userDispatch`から取得したりするだけで簡単に移行できました。
 コード見たほうが早いと思います。
 [https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/routes/Home.tsx](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/routes/Home.tsx)
 
-## 7. やってみた感想
+## やってみた感想
 
 epic周りのエラーを修正している時が一番しんどかったです。
 React ReduxのHooksやtype-script-fsaのおかげでコードがシンプルになり、TypeScriptのおかげでエディタの補完機能がいい感じに効くようになるのはかなり良いなぁと思いました。
