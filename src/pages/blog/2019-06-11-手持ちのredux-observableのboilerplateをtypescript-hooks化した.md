@@ -67,7 +67,7 @@ react-redux 7.1.0も型定義がありませんでした。
 `src/@types/react-redux.d.ts`を作りそこに型定義を書きました。
 [https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts)
 
-## typescript-fsaの導入
+## 4. typescript-fsaの導入
 せっかくTypeScript化したのだからその恩恵をもっと受けようと思い[typescript-fsa](https://github.com/aikoven/typescript-fsa)を導入しました。
 
 これの何が嬉しいのかというと、これが↓
@@ -158,7 +158,7 @@ ofAction(actions.login.started)
 ```
 のようにepicを書くことができてとても嬉しいのですが、１点注意事項があって、`yarn add typescript-fsa-redux-observable` でインストールできるtypescript-fsa-redux-observableはちょっと古いようで、githubのrepositoryにあるREADMEのような記述をするには`yarn add https://github.com/m0a/typescript-fsa-redux-observable`と直接githubのrepositoryを指定する必要がありました。
 
-## Epicの修正 rxjs5->6
+## 5. Epicの修正 rxjs5->6
 自分が使っていたrxjsが5系だったので、ついでだから6系に上げようと思ったら結構仕様が変わっていて、さらにTypeScript化することもあいまってなかなか大変でした。
 
 rxjs5系では . で繋げてこんな感じで書いていたのですが
@@ -220,3 +220,11 @@ export const fetchRepositories: Epic<AnyAction> = (action$) => action$.pipe(
 [https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/epics/github.ts](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/epics/github.ts)
 
 コードはすっきりしてこの書き方のほうが好きなんですが、型エラーがでた時にエラーメッセージがすさまじく長くて一体どこの型どうまずいのか非常に分かりにくくて辛かったです。
+
+## 6. React ReduxのHooks利用
+React側のHooks使うんだから、Reduxでも用意されてるHooksを使いたいと思い、対応している7.1.0-rc.1も出ていたので使っていくことにしました。（この記事執筆時点で丁度7.1.0が出ました）
+
+導入は割と楽にできて、`connect`や`mapStateToProps`が不要なり、代わりに`useSelector`を使うようにしたり、propsから取ってきていたdispatchを`userDispatch`から取得したりするだけで簡単に移行できました。
+コード見たほうが早いと思います。
+[https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/routes/Home.tsx](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/routes/Home.tsx)
+
