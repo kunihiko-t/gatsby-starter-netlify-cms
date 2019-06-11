@@ -9,10 +9,61 @@ tags:
   - typescript
   - hooks
 ---
-何か開発を始める時に度々使っていたredux-observableのboilerplateがちょっと古くなってきたので、この際TypeScript化してHooksも使うようにしてrxjsも5系から6系に上げよう！と思いたち、なんとか動くところまで持っていけたので、同じような事をしようとしてる人達と自分の振り返りのために記事として残すことした。
+何か開発を始める時に度々使っていたredux-observableのboilerplateがちょっと古くなってきたので、この際TypeScript化してHooksも使うようにしてrxjsも5系から6系に上げよう！と思いたち、なんとか動くところまで持っていけたので、同じような事をしようとしてる人達と自分の振り返りのために記事として残すことにしました。
 
 ちなみにrepositoryはここ。
 
  <https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate>
 
 ## 1. とりあえず土台を作る
+
+フルスクラッチで１つ１つ設定など書いていくのが面倒だったので
+
+` create-react-app my-app --typescript`
+
+してからejectしました。
+
+typescript-eslintなどの設定はこちらを参考にさせていただきました。(実際のところ全部終わってから追加しましたが)
+
+<http://watanabeyu.blogspot.com/2019/02/typescript-eslinttypescriptlinteslintai.html>
+
+そして既存のファイルを\*.js -> \*.ts, \*.jsx -> \*.tsx にしてとりあえず突っ込んでいきました。
+
+## 2.　型周りエラーを地道に修正していく
+
+コンポーネント周りなど普通にesで書いてると型定義とかもちろんないのでエラーが出まくります。
+
+例えばこんな感じで書いてるとitemsのlengthがないぞとかで怒られるお思います。
+```javascript
+const repositoryList = ({ items, total_count, isLoading }) => {
+    const totalCountElem = items.length > 0 ? (<div>Total Count: {total_count}</div>) : (<></>)
+........
+```
+
+このように全てのパラメータに型を定義していきます。
+```typescript
+const repositoryList: React.FC<{ items: GithubRepository[], total_count: number, isLoading: boolean }> = ({ items, total_count, isLoading }) => {
+......
+}
+```
+最初はめんどくさいなーとか思ってやってましたが、ちゃんと型定義することでPropTypesとか書かなくて良くなり無駄なコードが減ってエディタの補完にも優しくフロントでも型あったほうが良いなぁと思うようになりました。
+
+### 3. ライブラリの型がない
+だいたいの新しめのライブラリには型定義があり、 `yarn add @types/ライブラリ名`　でインストールできます。
+
+ただ、新しすぎるライブラリや古いライブラリなどは型定義がないものもあるようで、今回[Hooks](https://react-redux.js.org/next/api/hooks)のために入れた
+react-redux 7.1.0も型定義がありませんでした。
+
+`yarn add @tyes/react-redux@7.1.0` とかやってみると、指定されたバージョンの型定義がないからリストから選べって言われてしまいます。
+
+どうしたもんかなと思ったんですが、ライブラリに型定義がない場合は自分で追加することもできるらしく、tsconfig.jsonのtypeRootsプロパティに設定されたディレクトリ以下に`react-redux.d.ts`みたいなファイルを作って型定義を行うことで型定義がない関数なども利用可能になるようです。
+自分の場合はtypeRootsの定義がこんな感じなので
+```
+    "typeRoots": [
+      "node_modules/@types",
+      "src/@types"
+    ],
+```
+`src/@types/react-redux.d.ts`を作りそこに型定義を書きました。
+[https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts)
+
