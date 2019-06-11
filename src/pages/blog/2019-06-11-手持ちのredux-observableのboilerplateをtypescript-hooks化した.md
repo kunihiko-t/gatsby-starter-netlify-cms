@@ -29,7 +29,7 @@ typescript-eslintなどの設定はこちらを参考にさせていただきま
 
 そして既存のファイルを\*.js -> \*.ts, \*.jsx -> \*.tsx にしてとりあえず突っ込んでいきました。
 
-## 型周りエラーを地道に修正していく
+## 型周りのエラーを地道に修正していく
 
 コンポーネント周りなど普通にesで書いてると型定義とかもちろんないのでエラーが出まくります。
 
@@ -193,7 +193,8 @@ export function fetchRepositories(action$) {
 }
 ```
 
-rxjs6 + typescript-fsa-redux-observable　ではちょっと内容が違いますがこんなノリになります。
+rxjs6 + typescript-fsa-redux-observable　ではこんなノリになります。（ちょっと上記と内容が違いますが）
+
 pipeで繋げる感じになって、method chainで呼び出すのではなく、関数を個別で呼び出す感じです。
 ```typescript
 export const fetchRepositories: Epic<AnyAction> = (action$) => action$.pipe(
@@ -219,19 +220,24 @@ export const fetchRepositories: Epic<AnyAction> = (action$) => action$.pipe(
 ```
 [https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/epics/github.ts](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/epics/github.ts)
 
-コードはすっきりしてこの書き方のほうが好きなんですが、型エラーがでた時にエラーメッセージがすさまじく長くて一体どこの型どうまずいのか非常に分かりにくくて辛かったです。
+コードはすっきりしてこの書き方のほうが好きなんですが、型エラーがでた時にエラーメッセージがすさまじく長くて一体どこの型がどうマズイのか非常に分かりにくくて辛かったです。
 
 ## React ReduxのHooks利用
 React側のHooks使うんだから、Reduxでも用意されてるHooksを使いたいと思い、対応している7.1.0-rc.1も出ていたので使っていくことにしました。（この記事執筆時点で丁度7.1.0が出ましたが型定義は7.0.9のまま。。）
 
-導入は割と楽にできて、`connect`や`mapStateToProps`が不要なり、代わりに`useSelector`を使うようにしたり、propsから取ってきていたdispatchを`userDispatch`から取得したりするだけで簡単に移行できました。
-コード見たほうが早いと思います。
+導入は割と楽にできて、`connect`や`mapStateToProps`が不要になり、代わりに`useSelector`を使うようにしたり、propsから取ってきていたdispatchを`userDispatch`から取得したりするだけで簡単に移行できました。
+
+コードを見たほうが早いと思います。
 [https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/routes/Home.tsx](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/routes/Home.tsx)
 
 ## やってみた感想
 
 epic周りのエラーを修正している時が一番しんどかったです。
+
 React ReduxのHooksやtype-script-fsaのおかげでコードがシンプルになり、TypeScriptのおかげでエディタの補完機能がいい感じに効くようになるのはかなり良いなぁと思いました。
+
+boilerplate程度の規模だとちょいちょい時間を取って数日もあればできるのでやって良かったなぁという感じです。
+
 最近next.jsで`next export`という機能があると知ったので次はnext.jsで動くようにしたいと思っています。
 
 あと、webpackのalias設定うまくいってないのでそこをどうにかしたい。
