@@ -33,7 +33,7 @@ typescript-eslintなどの設定はこちらを参考にさせていただきま
 
 コンポーネント周りなど普通にesで書いてると型定義とかもちろんないのでエラーが出まくります。
 
-例えばこんな感じで書いてるとitemsのlengthがないぞとかで怒られるお思います。
+例えばこんな感じで書いてるとitemsのlengthがないぞとかで怒られると思います。
 ```javascript
 const repositoryList = ({ items, total_count, isLoading }) => {
     const totalCountElem = items.length > 0 ? (<div>Total Count: {total_count}</div>) : (<></>)
@@ -233,3 +233,6 @@ React側のHooks使うんだから、Reduxでも用意されてるHooksを使い
 epic周りのエラーを修正している時が一番しんどかったです。
 React ReduxのHooksやtype-script-fsaのおかげでコードがシンプルになり、TypeScriptのおかげでエディタの補完機能がいい感じに効くようになるのはかなり良いなぁと思いました。
 最近next.jsで`next export`という機能があると知ったので次はnext.jsで動くようにしたいと思っています。
+
+あと、webpackのalias設定うまくいってないのでそこをどうにかしたい。
+TypeScriptだとちょっと勝手が違うぽい。
