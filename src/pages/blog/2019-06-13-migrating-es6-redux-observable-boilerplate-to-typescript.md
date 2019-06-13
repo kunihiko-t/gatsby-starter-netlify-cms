@@ -58,3 +58,23 @@ At first, I was feeling "It's troublesome...", but defining types made me happy.
 I can remove PropType from my components, and it helps (WebStorm|VScode)'s code completion, and I can notice errors without running the program.
 
 ## Some libraries don't have types
+
+Almost modern libraries have type definitions, and we can install them with `yarn add @types/name`.
+
+But some too new or old libraries don't have type definitions, this time, react-redux 7.1.0 doesn't have type definitions.
+I tried `yarn add @tyes/react-redux@7.1.0`, but I've got a message like `No such version`.
+
+In this case, we can add type definitions myself.
+Put the file like a `react-redux.d.ts` on your `typeRoots` defined by `tsconfig.json`, so you can write type definitions.
+
+My `typeRoots` is following, so I put the `redux.d.ts` on `src/@types/redux.d.ts`.
+```
+    "typeRoots": [
+      "node_modules/@types",
+      "src/@types"
+    ],
+```
+<https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts>
+
+## Introducing typescript-fsa
+
