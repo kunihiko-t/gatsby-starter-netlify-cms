@@ -78,3 +78,95 @@ My `typeRoots` is following, so I put the `redux.d.ts` on `src/@types/redux.d.ts
 
 ## Introducing typescript-fsa
 
+Since i'm migrating ES6 to TypeScript, I though that I need more benefit from types, so I introduced [typescript-fsa](https://github.com/aikoven/typescript-fsa) .
+
+What is great about this?
+Let's say we have following code.
+```javascript
+import keyMirror from 'fbjs/lib/keyMirror';
+
+export const ActionTypes = keyMirror({
+    USER_LOGIN_REQUEST: undefined,
+    USER_LOGIN_SUCCESS: undefined,
+    USER_LOGIN_FAILURE: undefined,
+})
+
+export function login() {
+    return {
+        type: ActionTypes.USER_LOGIN_REQUEST,
+        payload: { id: 'test' },
+    };
+}
+```
+
+We can migrate above code to following code with typescript-fsa
+
+```typescript
+const keyMirror = require('fbjs/lib/keyMirror')
+
+export const ActionTypes = keyMirror({
+    USER_LOGIN: undefined,
+})
+
+
+import actionCreatorFactory from 'typescript-fsa'
+
+const ac = actionCreatorFactory()
+
+interface LoginParam {
+    id: string
+}
+
+interface LoginResult {
+    data: any
+}
+
+interface LoginError {
+    error: string
+}
+
+export default {
+    login: ac.async<LoginParam, LoginResult, LoginError>(ActionTypes.USER_LOGIN),
+    }
+```
+
+If you are using [typescript-fsa-reducers](https://github.com/dphilipson/typescript-fsa-reducers), you can write very simple & clear reducers.
+
+```typescript
+import immutable from 'immutability-helper'
+import { reducerWithInitialState } from 'typescript-fsa-reducers'
+import actions from '../actions/user'
+
+export const userState = {
+    isAuthenticated: false,
+    status: 'idle',
+}
+
+export default {
+    user: reducerWithInitialState(userState)
+        .case(actions.login.started, (state, action) => {
+            return immutable(state, {
+                status: { $set: 'running' },
+            })
+        })
+        .case(actions.login.done, (state, action) => {
+            return immutable(state, {
+                status: { $set: 'idle' },
+                isAuthenticated: { $set: true },
+            })
+        })
+        .case(actions.login.failed, (state, action) => {
+            return immutable(state, {
+                status: { $set: 'running' },
+                isAuthenticated: { $set: false },
+            })
+        }) ........
+```
+
+We'll use redux-observable, so we can use [typescript-fsa-redux-observable](https://github.com/m0a/typescript-fsa-redux-observable) as well.
+
+It enables following method, and it makes us happy.
+```typescript
+ofAction(actions.login.started)
+```
+But there is one point of caution, `yarn add typescript-fsa-redux-observable` installs old version of typescript-fsa-redux-observable, so we have to use `yarn add https://github.com/m0a/typescript-fsa-redux-observable` for install new version.
