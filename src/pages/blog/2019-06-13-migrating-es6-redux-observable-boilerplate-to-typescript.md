@@ -1,10 +1,10 @@
 ---
 templateKey: blog-post
-title: Migrating ES6 redux-observable boilerplate to TypeScript & Hooks
+title: Migrate redux-observable boilerplate from ES6 to TypeScript & Hooks
 date: '2019-06-13T19:44:57+09:00'
 description: >-
-  This article is a note for migrating ES6 redux-observable-boilerplate to
-  TypeScript
+  This article is a note for migrating old redux-observable-boilerplate to
+  modern TypeScript & Hooks
 tags:
   - React
   - redux-observable
