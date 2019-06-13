@@ -248,3 +248,11 @@ I think it's faster to read the code.
 
 <https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/routes/Home.tsx>
 
+## Impressions
+
+Hooks of React Redux & typescript-fsa makes code simple, TypeScript helps Editor's auto completion, and I can notice errors easily due to types.
+I think these things help coding speed and I can feel safe.
+
+In my case, migrating this kind of small project didn't take a lot of time, so I'm feeling satisfied.
+
+My next goal is running it on [Next.js](https://nextjs.org/).
