@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-title: 手持ちのredux-observableのboilerplateをTypeScript+Hooks化した
+title: 手持ちのredux-observableのboilerplateをTypeScript & Hooks化した
 date: '2019-06-11T16:08:55+09:00'
 description: '手持ちのredux-observableのboilerplateをTypeScript+Hooks化して公開した時の話。 '
 tags:
