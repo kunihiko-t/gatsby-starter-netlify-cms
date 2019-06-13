@@ -170,3 +170,81 @@ It enables following method, and it makes us happy.
 ofAction(actions.login.started)
 ```
 But there is one point of caution, `yarn add typescript-fsa-redux-observable` installs old version of typescript-fsa-redux-observable, so we have to use `yarn add https://github.com/m0a/typescript-fsa-redux-observable` for install new version.
+
+## Fix epics, Rxjs 5 to 6
+
+Rxjs 5 to 6 has some breaking changes.
+Some method are removed, and styles also changed.
+
+I had following method chain code for Rxjs 5.
+```javascript
+export function fetchRepositories(action$) {
+    return action$
+        .ofType(ActionTypes.FETCH_REPOSITORIES_REQUEST)
+        .delay(1000)
+        .mergeMap(param =>
+            Observable.defer(() =>
+                Observable.fromPromise(
+                    axios.get(
+                        `${ApiBaseUrl}/github/repositories?installation_id=${
+                            param.payload.installationID
+                        }`
+                    )
+                )
+            ).map(data => {
+                return {
+                    type: ActionTypes.FETCH_REPOSITORIES_SUCCESS,
+                    payload: { response: data.data },
+                };
+            })
+        )
+        .catch(error =>
+            Observable.of({
+                type: ActionTypes.FETCH_REPOSITORIES_FAILURE,
+                payload: { error },
+                error: true,
+            })
+        );
+}
+```
+
+rxjs6 + typescript-fsa-redux-observable requires individual function calls instead of method chain.
+
+(some details are different from above code)
+
+```typescript
+export const fetchRepositories: Epic<AnyAction> = (action$) => action$.pipe(
+    ofAction(actions.fetchRepositories.started),
+    debounceTime(1000),
+    mergeMap((param) =>
+        ajax.getJSON(`https://api.github.com/search/repositories?q=+language:javascript+created:%3E2016-10-01&sort=stars&order=desc`).pipe(
+            map(data => {
+                return actions.fetchRepositories.done({
+                    params: param.payload,
+                    result: { repositories: data },
+                })
+            }),
+            catchError(error =>
+                Observable.of(actions.fetchRepositories.failed({
+                    params: param.payload,
+                    error: error,
+                })),
+            ),
+        ),
+    ),
+)
+```
+<https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/epics/github.ts>
+
+I prefer this styles, but once I've got errors, it displays too long error messages. It's so tough to understand what they saying.
+
+## Using hooks with React Redux 7.1.0
+
+Since I'm using React's hooks, so I might as well use brand new [Hooks](https://react-redux.js.org/next/api/hooks) with React Redux. 
+Using hooks in components are very simple.
+We can use `useSelector` instead of `connect` and `mapStateToProps`, and we can get `dispatch` function from `useDispatch`.
+
+I think it's faster to read the code.
+
+<https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/routes/Home.tsx>
+
