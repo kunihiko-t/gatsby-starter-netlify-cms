@@ -37,6 +37,24 @@ Then, I renamed *.js, *jsx to *.ts, *tsx and put these files to a new project di
 
 ## Fix errors around "Type"
 
-There are many errors around "Type", because existing components are ES6 and they don't have any types.
+There are many errors around "Type", because existing components are written in ES6 and they don't have any types.
 
-For example, 
+For example, following components has an error like a `Item doesn't have length`
+
+```javascript
+const repositoryList = ({ items, total_count, isLoading }) => {
+    const totalCountElem = items.length > 0 ? (<div>Total Count: {total_count}</div>) : (<></>)
+........
+```
+So, We'll define types for all parameters like this
+
+```typescript
+const repositoryList: React.FC<{ items: GithubRepository[], total_count: number, isLoading: boolean }> = ({ items, total_count, isLoading }) => {
+......
+}
+```
+
+At first, I was feeling "It's troublesome...", but defining types made me happy.
+I can remove PropType from my components, and it helps (WebStorm|VScode)'s code completion, and I can notice errors without running the program.
+
+## Some libraries don't have types
