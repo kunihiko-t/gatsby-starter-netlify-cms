@@ -67,14 +67,14 @@ I tried `yarn add @tyes/react-redux@7.1.0`, but I've got a message like `No such
 In this case, we can add type definitions myself.
 Put the file like a `react-redux.d.ts` on your `typeRoots` defined by `tsconfig.json`, so you can write type definitions.
 
-My `typeRoots` is following, so I put the `redux.d.ts` on `src/@types/redux.d.ts`.
+My `typeRoots` is following, so I put the `redux.d.ts` on `src/types/redux.d.ts`.
 ```
     "typeRoots": [
       "node_modules/@types",
-      "src/@types"
+      "src/types"
     ],
 ```
-<https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts>
+<https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/types/react-redux.d.ts>
 
 ## Introducing typescript-fsa
 
