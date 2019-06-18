@@ -61,11 +61,11 @@ react-redux 7.1.0も型定義がありませんでした。
 ```
     "typeRoots": [
       "node_modules/@types",
-      "src/@types"
+      "src/types"
     ],
 ```
-`src/@types/react-redux.d.ts`を作りそこに型定義を書きました。
-[https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/%40types/react-redux.d.ts)
+`src/types/react-redux.d.ts`を作りそこに型定義を書きました。
+[https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/types/react-redux.d.ts](https://github.com/kunihiko-t/redux-observable-ts-hooks-boilerplate/blob/master/src/types/react-redux.d.ts)
 
 ## typescript-fsaの導入
 せっかくTypeScript化したのだからその恩恵をもっと受けようと思い[typescript-fsa](https://github.com/aikoven/typescript-fsa)を導入しました。
