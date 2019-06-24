@@ -4,9 +4,9 @@ title: About
 ---
 I'm a freelance server-side / frontend engineer working in Tokyo.
 
-最近はリモートでGolangやReactのお仕事やってます。
+最近はリモートでGolangやReact, Laravel, Vue(Nuxt)のお仕事やってます。
 
-フルタイムは難しいですが、週１〜２ぐらいのお仕事であればお手伝いできるかもしれません。
+フルタイムは難しいですが、16時〜20時あたりでできるお仕事であればお手伝いできるかもしれません。
 
 お問い合わせは下記いずれかからどうぞ。
 
