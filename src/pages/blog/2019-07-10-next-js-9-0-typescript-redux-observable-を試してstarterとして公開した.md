@@ -10,7 +10,7 @@ tags:
   - typescript
   - hooks
 ---
-Next.js 9.0が出たで試してみたところ、色んなところでハマったのでメモとして残す。
+Next.js 9.0が出たので試してみたところ、色んなところでハマったのでメモとして残す。
 
 ## redux-observableを導入する段階でハマる
 Next.jsでreduxやredux-observableなどを使う時は `pages/_app.ts`に処理を書くらしく、いつもと勝手が違ってハマった。
