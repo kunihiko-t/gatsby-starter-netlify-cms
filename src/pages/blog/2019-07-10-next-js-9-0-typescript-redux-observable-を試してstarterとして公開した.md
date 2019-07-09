@@ -40,3 +40,4 @@ next.config.jsは[こんな感じ](https://github.com/kunihiko-t/nextjs9-ts-redu
 }
 ```
 このあたりを追記したら解決した。
+
