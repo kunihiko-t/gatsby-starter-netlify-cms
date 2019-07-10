@@ -40,3 +40,36 @@ In the Next.js world, we have to create next.config.js instead of webpack.config
 So I wrote css-loader settings on it. But it didn't work well.
 
 I googled & found the information about `@zeit/next-css`.
+But next-css was displaying error like `Invalid Option`, so I googled more, and I found [the issue](https://github.com/zeit/next-plugins/issues/392) of it.
+It's just workaround, but worked well.
+
+My next.config.js is following.
+
+[https://github.com/kunihiko-t/nextjs9-ts-redux-observable-starter/blob/master/next.config.js](https://github.com/kunihiko-t/nextjs9-ts-redux-observable-starter/blob/master/next.config.js)
+
+
+## Styled Components
+There are some errors on the browser console.
+I've googled again and some articles saying use `.babelrc`.
+So I've added `.babelrc` and it solved the issue.
+
+```
+{
+"presets": ["next/babel"],
+"plugins": ["styled-components"]
+}
+```
+
+## Published starter
+
+There are no errors for now. 
+
+I felt that using Next.js is little bit different from pure react development, and it made me confusing.
+
+So I published this article & [Next.js 9.0 + TypeScript + redux-observable starter](https://github.com/kunihiko-t/nextjs9-ts-redux-observable-starter) for me, and the person who is trying Next.js but struggling with errors.
+
+But this repository is still WIP.
+
+- [ ] Use middleware or something for Authentication
+- [ ] Set alias for `import { foo } from '~/foo'`
+- [ ] Remove 'any' type from epic
