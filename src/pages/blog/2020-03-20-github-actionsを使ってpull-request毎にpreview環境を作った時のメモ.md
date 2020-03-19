@@ -3,8 +3,8 @@ templateKey: blog-post
 title: Github Actionsを使ってPull Request毎にPreview環境を作った時のメモ
 date: '2020-03-20T01:09:07+09:00'
 description: >-
-  k8s(EKS), Skaffold1.2.0, Helm3
-  でGitOps的なPreview環境が欲しいよねという話になり、チームで作った時のメモ。ついでにローカル開発に使える環境も作った
+  GitOps的なPreview環境が欲しいよねという話になり、k8s(EKS), Skaffold1.2.0, Helm3
+  を使ってチームで作った時のメモ。ついでにローカル開発に使える環境も作った
 tags:
   - kubernetes
   - helm
