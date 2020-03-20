@@ -239,6 +239,8 @@ if: github.event.issue.pull_request != '' && startsWith(github.event.comment.bod
 ```
 
 詳しくはGithub Actionsのリファレンスを参照してください。
+
+
 [Workflow commands for GitHub Actions](https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-output-parameter)
 
 
