@@ -28,13 +28,13 @@ tags:
 - [jx](https://github.com/jenkins-x/jx) (jx contextが便利だから使っていただけ、別いにいらないです。Docker for Mac使っているならマウスでポチポチすればコンテキスト切り替えれます)
 - [Octant](https://github.com/vmware-tanzu/octant)(EKSを使っていたためGKEのようにダッシュボードがいい感じじゃないので確認用に採用しました。とても使いやすい。)
 
-# なぜGKEじゃなくてEKSなのか
+# EKSかGKEか
 
 他のAWSサービスとの連携がしたいとか政治的な都合とかがなければGKEの方が絶対楽だと思います。
 
 EKS自体のManagement feeが取られるのも微妙だなーと思っていましたが、今年6月からGKEも取るようなのでそこはまぁいいかという感じです。
 
-一番きついのはPODに割当可能なIPアドレスの制限です。せめてLargeぐらいないと全然Preview環境がはやせません。
+一番きついのはPODに割当可能なIPアドレスの制限です。せめてt3.largeぐらいないと全然Preview環境が生やせません。
 
 [https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/using-eni.html]([https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/using-eni.html])
 
