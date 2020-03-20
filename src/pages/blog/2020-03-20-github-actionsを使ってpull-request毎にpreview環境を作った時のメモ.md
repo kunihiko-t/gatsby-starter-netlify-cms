@@ -326,6 +326,43 @@ apiGroupsとかresourcesに設定する名前は
 これもGithub Actionsでやってしまいましょう。
 namespaceを消せば終わりです。
 
+例
+```
+name: Close Preview
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  close-preview:
+    name: Close Preview Environment
+    runs-on: ubuntu-18.04
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+      - name: Install kubectl
+        run: |-
+          curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/kubectl
+      - name: Set k8s context
+        run: |-
+          aws eks --region ap-northeast-1 update-kubeconfig --name a-dev
+          kubectl config get-contexts
+      - name: delete namespace
+        run: |-
+          echo $PR_NUMBER
+          if [[ -n $(kubectl get ns | grep ^pr$PR_NUMBER) ]]; then
+            kubectl delete ns pr$PR_NUMBER
+          fi
+```
+
+
 ### Octantで正常に動いているか確認してみる
 
 別にkubectl使っても良いですが、[Octant](https://github.com/vmware-tanzu/octant)を利用するとブラウザで色々と楽に確認できるのでおすすめです。
