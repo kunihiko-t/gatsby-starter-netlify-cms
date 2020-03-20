@@ -267,7 +267,7 @@ spec:
 
 ```
 ...略...
-could not get information about the resource: sealedsecrets.bitnami.com "agent-bank-preview-secret" is forbidden: User "ci" cannot get resource "sealedsecrets" in API group "bitnami.com" in the namespace
+could not get information about the resource: sealedsecrets.bitnami.com "a-preview-secret" is forbidden: User "ci" cannot get resource "sealedsecrets" in API group "bitnami.com" in the namespace
 ...略...
 ```
 
