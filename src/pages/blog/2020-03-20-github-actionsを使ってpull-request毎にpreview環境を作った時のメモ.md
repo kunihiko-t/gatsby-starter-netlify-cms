@@ -326,8 +326,8 @@ apiGroupsとかresourcesに設定する名前は
 これもGithub Actionsでやってしまいましょう。
 namespaceを消せば終わりです。
 
-例
-```
+例えばこんな感じです。
+```yaml
 name: Close Preview
 on:
   pull_request:
