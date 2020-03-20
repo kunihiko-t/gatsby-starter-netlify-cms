@@ -66,9 +66,9 @@ helm upgrade --install nginx-ingress stable/nginx-ingress -f charts/nginx-ingres
 helm upgrade --install sealed-secrets stable/sealed-secrets -f charts/sealed-secrets/values.yaml --namespace kube-system --wait
 ```
 
-ローカルでまず試す時、docker for macのKubernetesは`Reset Kubernetes Cluseter`ボタンをポチッと押すだけで環境が初期化され、何度も１から入れ直して動作を確認するのにとても便利でした。
-
 Makefileをちゃんと書いてくと再インストールも楽々です。
+
+ローカルでまず試す時、docker for macのKubernetesであれば`Reset Kubernetes Cluseter`ボタンをポチッと押すだけで環境が初期化できるので、何度も１から入れ直して動作を確認できてとても便利でした。
 
 秘密情報の格納方法としては[sealed-secret](https://github.com/bitnami-labs/sealed-secrets)が便利そうだったので使うことにしました。
 
