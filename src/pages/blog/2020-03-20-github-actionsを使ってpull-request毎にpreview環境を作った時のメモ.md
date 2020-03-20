@@ -40,7 +40,7 @@ EKS自体のManagement feeが取られるのも微妙だなーと思っていま
 
 # まずはAWS上に環境構築
 
-terraformでやるのが良いかと思います。
+terraformでやると記録がコードとして残るで良いかと思います。
 
 ECR,IAM,各種ネットワーク、DBを共用するならRDS、あとはEKSクラスタなどをここで作ってしまいます。
 今回はノードにt3.largeインスタンスを利用しました。
@@ -50,6 +50,8 @@ t3.largeだと36個のIPが利用できるとようです。
 
 Fargate for EKSは今回ALBしか使えない関係で使いませんでした。
 <https://dev.classmethod.jp/cloud/aws/outline-about-fargate-for-eks/>
+
+Route53の設定なんかも忘れるとIngress設定したのに動かない！みたいなことになるのでお忘れなく。
 
 # 最低限必要なものや全体で使いそうなものをk8sクラスタに入れていく
 
