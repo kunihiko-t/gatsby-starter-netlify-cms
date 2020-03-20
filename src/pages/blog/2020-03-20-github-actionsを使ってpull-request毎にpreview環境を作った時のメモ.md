@@ -40,7 +40,7 @@ EKS自体のManagement feeが取られるのも微妙だなーと思っていま
 
 # まずはAWS上に環境構築
 
-terraformでやるのが良いかと思います。
+terraformでやると記録がコードとして残るで良いかと思います。
 
 ECR,IAM,各種ネットワーク、DBを共用するならRDS、あとはEKSクラスタなどをここで作ってしまいます。
 今回はノードにt3.largeインスタンスを利用しました。
@@ -50,6 +50,8 @@ t3.largeだと36個のIPが利用できるとようです。
 
 Fargate for EKSは今回ALBしか使えない関係で使いませんでした。
 <https://dev.classmethod.jp/cloud/aws/outline-about-fargate-for-eks/>
+
+Route53の設定なんかも忘れるとIngress設定したのに動かない！みたいなことになるのでお忘れなく。
 
 # 最低限必要なものや全体で使いそうなものをk8sクラスタに入れていく
 
@@ -220,6 +222,25 @@ Pull Requestからpreview環境を生やしたいわけなので、Github Action
 ```yaml
 if: github.event.issue.pull_request != '' && startsWith(github.event.comment.body, '/preview')
 ```
+そしてどのBranch（Pull Request）でコメントされたかを判断し、checkoutする処理はこんな下記のような感じです。
+
+```yaml
+
+      - name: get branch
+        id: get-branch
+        run: |-
+          BRANCH_NAME=`curl -s -H "Content-type: application/json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }} | jq -r .head.ref`
+          echo "::set-output name=branch_name::$BRANCH_NAME"
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.get-branch.outputs.branch_name }}
+
+
+```
+
+詳しくはGithub Actionsのリファレンスを参照してください。
+[Workflow commands for GitHub Actions](https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-output-parameter)
+
 
 あとは環境変数にPull Requestの番号を格納し、諸々必要なツールをインストールしたらこんな感じでネームスペースを作ってあげて
 
@@ -270,7 +291,7 @@ could not get information about the resource: sealedsecrets.bitnami.com "agent-b
 ...略...
 ```
 
-上記のような権限エラーが出たら、AWS側で定義してあるIAMユーザを元に適切設定を行ってください。
+こんな感じで権限エラーが出たら、AWS側で定義してあるIAMユーザを元に適切設定を行ってください。
 
 ```yaml
 apiVersion: v1
@@ -312,9 +333,10 @@ roleRef:
 apiGroupsとかresourcesに設定する名前は
 `kubectl api-resources` で確認できます。
 
-IAMユーザとk8s上のユーザのマッピングはこのあたりを参照してみてください
+このあたりを参照してみてください
 
 [クラスターのユーザーまたは IAM ロールの管理](https://docs.aws.amazon.com/ja_jp/eks/latest/userguide/add-user-role.html)
+
 
 
 [EKSでの認証認可 〜aws-iam-authenticatorとIRSAのしくみ〜](https://qiita.com/abe-ma/items/c1f6dffe810579cb87b6)
