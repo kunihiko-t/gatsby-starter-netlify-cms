@@ -6,9 +6,7 @@ I'm a freelance server-side / frontend engineer working in Tokyo.
 
 最近はリモートでGolangやReact, Laravel, Vue(Nuxt)のお仕事やってます。
 
-フルタイムは難しいですが、16時〜20時あたりでできるお仕事であればお手伝いできるかもしれません。
-
-お問い合わせは下記いずれかからどうぞ。
+次のお仕事をぼちぼち探してるのでもしご興味があれば下記いずれかからお問い合わせをお願いします。（2020/3/20現在）
 
 Twitter: [@kunihikot](https://twitter.com/kunihikot)
 
