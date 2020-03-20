@@ -46,7 +46,7 @@ ECR,IAM,各種ネットワーク、DBを共用するならRDS、あとはEKSク�
 今回はノードにt3.largeインスタンスを利用しました。
 
 リソース的にはもっと小さいインスタンスで良かったんですが、使えるIPの個数に制限があるため大きめのものにしました。
-t3.largeだと36個のIPが利用できるとようです。
+t3.largeだと36個のIPが利用できるようです。
 
 Fargate for EKSは今回ALBしか使えない関係で使いませんでした。
 <https://dev.classmethod.jp/cloud/aws/outline-about-fargate-for-eks/>
