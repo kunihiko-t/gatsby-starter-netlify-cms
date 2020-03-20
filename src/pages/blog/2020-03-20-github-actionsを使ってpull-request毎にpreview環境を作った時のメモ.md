@@ -4,7 +4,7 @@ title: Github Actionsを使ってPull Request毎にPreview環境を作った時�
 date: '2020-03-20T01:09:07+09:00'
 description: >-
   GitOps的なPreview環境が欲しいよねという話になり、k8s(EKS), Skaffold1.2.0, Helm3
-  を使ってチームで作った時のメモ。ついでにローカル開発に使える環境も作った
+  を使ってチームで作った時の備忘録的なやつです。ついでにローカル開発に使える環境も作りました。
 tags:
   - kubernetes
   - helm
@@ -22,9 +22,9 @@ tags:
 
 * AWS
   * EKS
-* terraform
-* Skaffold 1.2.0
-* Helm 3.0.0
+* [terraform](https://www.terraform.io/)
+* [Skaffold](https://skaffold.dev/) 1.2.0
+* [Helm](https://helm.sh/) 3.0.0
 * [jx](https://github.com/jenkins-x/jx) (jx contextが便利だから使っていただけ、別いにいらないです。Docker for Mac使っているならマウスでポチポチすればコンテキスト切り替えれます)
 * [Octant](https://github.com/vmware-tanzu/octant)(EKSを使っていたためGKEのようにダッシュボードがいい感じじゃないので確認用に採用しました。とても使いやすい。)
 
