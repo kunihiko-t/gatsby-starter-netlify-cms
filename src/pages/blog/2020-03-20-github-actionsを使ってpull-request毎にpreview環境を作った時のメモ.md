@@ -4,7 +4,7 @@ title: Github Actionsを使ってPull Request毎にPreview環境を作った時�
 date: '2020-03-20T01:09:07+09:00'
 description: >-
   GitOps的なPreview環境が欲しいよねという話になり、k8s(EKS), Skaffold1.2.0, Helm3
-  を使ってチームで作った時のメモ。ついでにローカル開発に使える環境も作った
+  を使ってチームで作った時の備忘録的なやつです。ついでにローカル開発に使える環境も作りました。
 tags:
   - kubernetes
   - helm
@@ -20,13 +20,13 @@ tags:
 
 # 使ったプラットフォームや技術スタックやツールなど
 
-- AWS
-  - EKS
-- terraform
-- Skaffold 1.2.0
-- Helm 3.0.0
-- [jx](https://github.com/jenkins-x/jx) (jx contextが便利だから使っていただけ、別いにいらないです。Docker for Mac使っているならマウスでポチポチすればコンテキスト切り替えれます)
-- [Octant](https://github.com/vmware-tanzu/octant)(EKSを使っていたためGKEのようにダッシュボードがいい感じじゃないので確認用に採用しました。とても使いやすい。)
+* AWS
+  * EKS
+* [terraform](https://www.terraform.io/)
+* [Skaffold](https://skaffold.dev/) 1.2.0
+* [Helm](https://helm.sh/) 3.0.0
+* [jx](https://github.com/jenkins-x/jx) (jx contextが便利だから使っていただけ、別いにいらないです。Docker for Mac使っているならマウスでポチポチすればコンテキスト切り替えれます)
+* [Octant](https://github.com/vmware-tanzu/octant)(EKSを使っていたためGKEのようにダッシュボードがいい感じじゃないので確認用に採用しました。とても使いやすい。)
 
 # EKSかGKEか
 
@@ -49,17 +49,18 @@ ECR,IAM,各種ネットワーク、DBを共用するならRDS、あとはEKSク�
 t3.largeだと36個のIPが利用できるとようです。
 
 Fargate for EKSは今回ALBしか使えない関係で使いませんでした。
-[https://dev.classmethod.jp/cloud/aws/outline-about-fargate-for-eks/](https://dev.classmethod.jp/cloud/aws/outline-about-fargate-for-eks/)
+<https://dev.classmethod.jp/cloud/aws/outline-about-fargate-for-eks/>
 
 # 最低限必要なものや全体で使いそうなものをk8sクラスタに入れていく
 
-- [grafana](https://grafana.com/)
-- [mailhog](https://github.com/mailhog/MailHog)
-- [nginx-ingress](https://github.com/kubernetes/ingress-nginx)
-- [prometheus](https://prometheus.io/)
-- [sealed-secret](https://github.com/bitnami-labs/sealed-secrets)(パスワードなどの管理用)
+* [grafana](https://grafana.com/)
+* [mailhog](https://github.com/mailhog/MailHog)
+* [nginx-ingress](https://github.com/kubernetes/ingress-nginx)
+* [prometheus](https://prometheus.io/)
+* [sealed-secret](https://github.com/bitnami-labs/sealed-secrets)(パスワードなどの管理用)
 
 あたりは　`/charts`　みたいなディレクトリを切ってパッケージごとにvalues.yamlを置いていってMakefileに下記のような感じで書いてインストールしていきました。
+
 ```
 helm upgrade --install nginx-ingress stable/nginx-ingress -f charts/nginx-ingress/values.yaml --namespace kube-system --wait
 helm upgrade --install sealed-secrets stable/sealed-secrets -f charts/sealed-secrets/values.yaml --namespace kube-system --wait
@@ -71,8 +72,6 @@ Makefileをちゃんと書いてくと再インストールも楽々です。
 
 秘密情報の格納方法としては[sealed-secret](https://github.com/bitnami-labs/sealed-secrets)が便利そうだったので使うことにしました。
 
-
-
 # Preview環境を構築する
 
 ## Helm か Kustomizeか
@@ -83,8 +82,6 @@ Preview環境も生やしたいけど、Local開発にも流用したい。
 
 [Kustomize](https://github.com/kubernetes-sigs/kustomize)が王道っぽくシンプルだったのでKustomizeで始めたのですが、なんか痒いところに手が届かず無理やりsedとか使う感じになってたので[Helm](https://github.com/helm/charts)に切り替えました。
 
-
-
 ## local環境とpreviewの差異をどう扱うか
 
 ```
@@ -92,8 +89,10 @@ charts/a-base
 charts/a-local
 charts/a-preview
 ```
+
 みたいに構成にしてbaseのtemplates以下に共通部分を書き、localやpreview側では
 Chart.yamlにdependenciesを定義しました。
+
 ```yaml
 dependencies:
   - name: a-base
@@ -101,9 +100,11 @@ dependencies:
     repository: file://../a-base
     alias: base
 ```
+
 この状態で例えばpreviewのvalues.yamlに下記のような感じで書けば依存先のvalues.yamlを上書きできます。
 
 完全に追加が必要な部分はtemplatesに追加すればいいです。
+
 ```yaml
 base:
   variantName: preview
@@ -121,8 +122,7 @@ skaffoldを使って動かすのでskaffold.yamlを定義します。
 
 デフォルトでskaffold devした時はローカルで動かしたいのでノリとしては下記yamlのような感じです。
 
-preview用のものはprofilesで分けていて、profileを指定せずに`skaffold dev -n a -v info --cleanup=false; helm delete a-local -n a
-`した時は一番上に定義したもの（local用）が動くようにしてます。
+preview用のものはprofilesで分けていて、profileを指定せずに`skaffold dev -n a -v info --cleanup=false; helm delete a-local -n a`した時は一番上に定義したもの（local用）が動くようにしてます。
 
 `--cleanup=false; helm delete a-local -n a` とかしてるのはskaffold1.2がhelm3に対応していなかったためです。
 
@@ -203,11 +203,9 @@ profiles:
             base.api.env.APP_URL: "https://pr{{.PR_NUMBER}}.api.dev-a.com"
             base.ingress.api.host: "pr{{.PR_NUMBER}}.api.dev-a.com"
 ... 省略 ...            
-
 ```
 
 skaffold.yamlからPull Requestの番号をhelmに渡しています。これは後述するGithub Actionsから渡されている値です。
-
 
 ### Github Actionsで動かす
 
@@ -218,27 +216,28 @@ Pull Requestからpreview環境を生やしたいわけなので、Github Action
 `/preview` とコメントした時だけpreview環境を作成します。
 
 こんな感じで判定できます。
+
 ```yaml
 if: github.event.issue.pull_request != '' && startsWith(github.event.comment.body, '/preview')
-
 ```
+
 あとは環境変数にPull Requestの番号を格納し、諸々必要なツールをインストールしたらこんな感じでネームスペースを作ってあげて
+
 ```yaml
 - name: Create Namespace
 run: |-
   if [[ -z $(kubectl get ns | grep ^pr$PR_NUMBER) ]]; then
     kubectl create ns pr$PR_NUMBER
   fi
-
 ```
 
 skaffoldでpreview環境を構築します。
 構築が終わったらコメントにURLを出してあげると親切だと思います。
+
 ```
 helm dependency update --skip-refresh k8s/charts/a-preview
 skaffold run -v info -p preview -n pr$(PR_NUMBER)
 ```
-
 
 Ingressを下記のような感じで定義していると、prXXX.dev-a.comみたいなノリでアクセスできるようになっていると思います。
 
@@ -259,7 +258,6 @@ spec:
             path: /
 ... 省略 ...
 {{- end }}
-
 ```
 
 ### 権限っぽいエラーが出た時
@@ -309,7 +307,6 @@ roleRef:
   kind: ClusterRole
   name: ci-sealedsecrets-admin
   apiGroup: rbac.authorization.k8s.io
-
 ```
 
 apiGroupsとかresourcesに設定する名前は
@@ -319,7 +316,7 @@ apiGroupsとかresourcesに設定する名前は
 
 [クラスターのユーザーまたは IAM ロールの管理](https://docs.aws.amazon.com/ja_jp/eks/latest/userguide/add-user-role.html)
 
-[](https://katainaka0503.hatenablog.com/entry/2019/12/07/091737)
+
 
 [EKSでの認証認可 〜aws-iam-authenticatorとIRSAのしくみ〜](https://qiita.com/abe-ma/items/c1f6dffe810579cb87b6)
 
@@ -329,12 +326,56 @@ apiGroupsとかresourcesに設定する名前は
 これもGithub Actionsでやってしまいましょう。
 namespaceを消せば終わりです。
 
+例えばこんな感じです。
+```yaml
+name: Close Preview
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  close-preview:
+    name: Close Preview Environment
+    runs-on: ubuntu-18.04
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+      - name: Install kubectl
+        run: |-
+          curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/kubectl
+      - name: Set k8s context
+        run: |-
+          aws eks --region ap-northeast-1 update-kubeconfig --name a-dev
+          kubectl config get-contexts
+      - name: delete namespace
+        run: |-
+          echo $PR_NUMBER
+          if [[ -n $(kubectl get ns | grep ^pr$PR_NUMBER) ]]; then
+            kubectl delete ns pr$PR_NUMBER
+          fi
+```
+
+
+### Octantで正常に動いているか確認してみる
+
+別にkubectl使っても良いですが、[Octant](https://github.com/vmware-tanzu/octant)を利用するとブラウザで色々と楽に確認できるのでおすすめです。
+インストールしてから`octant`と実行するだけです。表示される情報は現在有効なKubernetesのコンテキストについてなので、「あれ？なんかおかしいな」と思ったら`jx context`などで今のコンテキストを確認しましょう。
+
+![Octant](/img/スクリーンショット-2020-03-20-12.18.07.png)
+
 ## やってみた感想
 
-- EKSはGKEと比べてめんどくさい
-    - IPアドレスの数の制限や、GKEだとある機能がなかったりなど面倒でした
-- Helmのテンプレート書きにくい
-    - HelmというかGoのTemplateなんですが、 `indent 4` みたいな書き方どうも苦手です
-- 使い勝手はとても良くてチームのリソース使ってやる価値はありました
-- これで新規メンバーが参画した時も「おま環」問題が発生しにくくなるだろうと思っています
-- 何より色々知見が貯まってよかったです
+* EKSはGKEと比べてめんどくさい
+  * IPアドレスの数の制限や、GKEだとある機能がなかったりなど面倒でした
+* Helmのテンプレート書きにくい
+  * HelmというかGoのTemplateなんですが、 `indent 4` みたいな書き方どうも苦手です
+* 使い勝手はとても良くてチームのリソース使ってやる価値はありました
+* これで新規メンバーが参画した時も「おま環」問題が発生しにくくなるだろうと思っています
+* 何より色々知見が貯まってよかったです
