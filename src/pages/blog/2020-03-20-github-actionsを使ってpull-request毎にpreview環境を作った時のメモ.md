@@ -262,6 +262,67 @@ spec:
 
 ```
 
+### 権限っぽいエラーが出た時
+
+いざAWS上え動かそうとすると下記ようなエラー出る場合ClusterRole,ClusterRoleBinding,およびConfigMapの適切な設定が必要です。
+
+```
+...略...
+could not get information about the resource: sealedsecrets.bitnami.com "agent-bank-preview-secret" is forbidden: User "ci" cannot get resource "sealedsecrets" in API group "bitnami.com" in the namespace
+...略...
+```
+
+こんな感じで権限エラーが出たら、AWS側で定義してあるIAMユーザを元に適切設定を行ってください。
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
+data:
+... 略 ...
+  mapUsers: |
+    - userarn: arn:aws:iam::xxxx:user/ci
+      username: ci
+      groups:
+        - ci
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ci-sealedsecrets-admin
+rules:
+  - apiGroups: ["bitnami.com"]
+    resources: ["sealedsecrets"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ci-sealedsecrets-admin
+subjects:
+  - kind: Group
+    name: ci
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: ci-sealedsecrets-admin
+  apiGroup: rbac.authorization.k8s.io
+
+```
+
+apiGroupsとかresourcesに設定する名前は
+`kubectl api-resources` で確認できます。
+
+このあたりを参照してみてください
+
+[クラスターのユーザーまたは IAM ロールの管理](https://docs.aws.amazon.com/ja_jp/eks/latest/userguide/add-user-role.html)
+
+[](https://katainaka0503.hatenablog.com/entry/2019/12/07/091737)
+
+[EKSでの認証認可 〜aws-iam-authenticatorとIRSAのしくみ〜](https://qiita.com/abe-ma/items/c1f6dffe810579cb87b6)
+
 ### Pull RequestがマージされたりCloseされたらちゃんと消す
 
 消さないとリソースを食いつぶします。
