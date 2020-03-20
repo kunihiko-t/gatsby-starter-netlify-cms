@@ -66,9 +66,9 @@ helm upgrade --install nginx-ingress stable/nginx-ingress -f charts/nginx-ingres
 helm upgrade --install sealed-secrets stable/sealed-secrets -f charts/sealed-secrets/values.yaml --namespace kube-system --wait
 ```
 
-Makefileをちゃんと書いてくと再インストールも楽々です。
+ローカルでまず試す時、docker for macのKubernetesは`Reset Kubernetes Cluseter`ボタンをポチッと押すだけで環境が初期化され、何度も１から入れ直して動作を確認するのにとても便利でした。
 
-ローカルでまず試す時、docker for macのKubernetesであれば`Reset Kubernetes Cluseter`ボタンをポチッと押すだけで環境が初期化できるので、何度も１から入れ直して動作を確認できてとても便利でした。
+Makefileをちゃんと書いてくと再インストールも楽々です。
 
 秘密情報の格納方法としては[sealed-secret](https://github.com/bitnami-labs/sealed-secrets)が便利そうだったので使うことにしました。
 
@@ -263,7 +263,7 @@ spec:
 
 ### 権限っぽいエラーが出た時
 
-いざAWS上え動かそうとすると下記ようなエラー出る場合ClusterRole,ClusterRoleBinding,およびConfigMapの適切な設定が必要です。
+いざAWS上で動かそうとすると下記ようなエラーが出る場合、ClusterRole,ClusterRoleBinding,およびConfigMapの適切な設定が必要です。
 
 ```
 ...略...
