@@ -222,7 +222,7 @@ Pull Requestからpreview環境を生やしたいわけなので、Github Action
 ```yaml
 if: github.event.issue.pull_request != '' && startsWith(github.event.comment.body, '/preview')
 ```
-そしてどのBranch（Pull Request）でコメントされたかを判断し、checkoutする処理はこんな下記のような感じです。
+そしてどのBranch（Pull Request）でコメントされたかを判断し、checkoutする処理は下記のようになります。
 
 ```yaml
 
