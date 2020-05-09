@@ -49,8 +49,8 @@ if !checkOrigin(r) {
 
 [https://github.com/gorilla/websocket/blob/b65e62901fc1c0d968042419e74789f6af455eb9/server.go#L146](https://github.com/gorilla/websocket/blob/b65e62901fc1c0d968042419e74789f6af455eb9/server.go#L146)
 
-自分で
+自分でNewして必要なものだけAddTransportしよう。
 ```go
-	srv := handler.New(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+srv := handler.New(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 ```
-みたいにして必要なものだけAddTransportしよう。
+
